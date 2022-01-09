@@ -1,0 +1,23 @@
+{
+  "name": "emulador",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^16.0.6",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-install": "^1.1.0",
+    "gulp-sass": "^5.1.0",
+    "sass": "^1.47.0"
+  },
+  "scripts": {
+    "bundle": "gulp bundle",
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
