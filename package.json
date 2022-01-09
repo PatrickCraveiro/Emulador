@@ -15,7 +15,7 @@
   },
   "scripts": {
     "bundle": "gulp bundle",
-    "start": "electron ."
+    "start": "gulp bundle && electron ."
   },
   "keywords": [],
   "author": "",
