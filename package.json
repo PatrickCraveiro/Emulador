@@ -18,6 +18,6 @@
     "start": "gulp bundle && electron ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Patrick Craveiro",
   "license": "ISC"
 }
