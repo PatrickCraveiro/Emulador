@@ -1,7 +1,4 @@
 const electron = require("electron");
-const path = require('path');
-
-console.log(path)
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -17,6 +14,11 @@ app.on("ready", () => {
     icon: `${__dirname}/src/imgs/icon.png`,
     transparent: true,
     frame: false,
+    webPreferences: {
+      enableRemoteModule: true,
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   });
 
   mainWindow.openDevTools();
