@@ -1,12 +1,14 @@
 const fs = require("fs");
 
-let data = JSON.parse(fs.readFileSync("plataforma/apostilas_src_temp.json"), {
+let data = JSON.parse(fs.readFileSync("plataforma/lista_de_jogos.json"), {
   encoding: "utf-8",
 });
 
 let img = document.querySelector("img");
-let menu = document.querySelector(".selection-screen.screen");
+let menu = document.querySelector(".display-wrap-2 .display");
 let power = document.querySelector("input");
+let baixo = document.querySelector(".crossBottom");
+let cima = document.querySelector(".crossTop");
 
 console.log(data);
 
@@ -40,4 +42,28 @@ power.onchange = () => {
   setTimeout(() => {
     img.remove();
   }, 1500);
+};
+
+const move = (dir) => {
+  let marcado = document.querySelector(".marcado");
+
+  let direcao =
+    marcado[dir === "cima" ? "previousElementSibling" : "nextElementSibling"];
+
+  console.log(direcao);
+  if (!direcao) return;
+
+  marcado.classList.remove("marcado");
+
+  direcao.scrollIntoView({ block: "center" });
+
+  direcao.classList.add("marcado");
+  img.src = `src/imgs/${direcao.textContent}.gif`;
+};
+
+cima.onclick = () => {
+  move("cima");
+};
+baixo.onclick = () => {
+  move("baixo");
 };

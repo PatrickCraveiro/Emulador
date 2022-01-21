@@ -1,0 +1,27 @@
+{
+  "super nintendo": {
+    "roms": [
+      "Chrono Trigger",
+      "Dragon Ball Super Butouden 2",
+      "Doom",
+      "Donkey Kong",
+      "Legends of zelda",
+      "Mario Kart",
+      "Super Bomberman 5",
+      "Super Mario Bros"
+    ],
+    "extensao": "md",
+    "emulador": "Fusion"
+  },
+  "mega drive": {
+    "roms": [
+      "Sonic The Hedgehog 2",
+      "Sonic The Hedgehog 3",
+      "Golden Axe",
+      "Bonanza Bros",
+      "Decap Attack"
+    ],
+    "extensao": "md",
+    "emulador": "Fusion"
+  }
+}
