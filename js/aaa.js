@@ -5,10 +5,14 @@ let data = JSON.parse(fs.readFileSync("plataforma/lista_de_jogos.json"), {
 });
 
 let img = document.querySelector("img");
-let menu = document.querySelector(".display-wrap-2 .display");
+let menu = document.querySelector(".selection-container__display__screen");
 let power = document.querySelector("input");
-let baixo = document.querySelector(".crossBottom");
-let cima = document.querySelector(".crossTop");
+let baixo = document.querySelector(
+  ".selection-container__nav-btn__directional__bottom"
+);
+let cima = document.querySelector(
+  ".selection-container__nav-btn__directional__top"
+);
 
 console.log(data);
 
@@ -17,7 +21,7 @@ Object.entries(data).forEach(([key, value]) => {
 
   a.roms.forEach((el) => {
     let div = document.createElement("div");
-    div.className = "game-secao";
+    div.className = "selection-container__display__screen__game";
 
     div.textContent = el;
 

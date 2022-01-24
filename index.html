@@ -3,115 +3,100 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="dist/emulador.min.css" />
   <title>Emulador</title>
-  <style></style>
 </head>
 
 <body>
-  <div id="root">
-    <div class="main-window">
-      <container class="game-container">
-        <div class="top">
-          <div id="cam-mic-holder">
-            <div id="camera">
-              <div id="mic">
-              </div>
-            </div>
-          </div>
-          <div class="display-wrap">
-            <div class="display">
-              <img src="" alt="" srcset="">
-            </div>
-          </div>
-          <ul class="speacker-1">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-          <ul class="speacker-2">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-          <hr class="l-1">
-          <hr class="l-2">
-          <span class="pipka-1"></span>
-          <span class="pipka-2"></span>
-          <div class="square-1"></div>
-          <div class="square-2"></div>
-          <div class="square-3"></div>
-          <div class="square-4"></div>
-          <div class="left"></div>
-          <div class="right">
-            <ul>
-              <li class="diod-1"></li>
-              <li class="diod-2"></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="midle">
-          <span class="mic"></span>
-          <span class="mic-2">mic.</span>
-        </div>
-
-      </container>
-      <div class="separator" style=" height: 43px; ">
-        <div class="meio"></div>
+  <container class="game-container">
+    <div class="game-container__cam">
+      <div class="game-container__cam__internal">
+        <div class="game-container__cam__lens"></div>
       </div>
-      <container class="selection-container">
-        <nav class="nav_btn">
-          <div class="controllerLeft">
-            <div class="crossCenter">
-              <div class="crossTop"></div>
-              <div class="crossBottom"></div>
-              <div class="crossLeft"></div>
-              <div class="crossRight"></div>
-              <div class="crossCircle"></div>
-            </div>
-          </div>
-        </nav>
-        <div class="display-wrap-2 ">
-          <div class="display scrollbar">
+    </div>
+    <div class="game-container__display">
+      <div class="game-container__display__screen">
+        <img src="" alt="" srcset="">
+      </div>
+    </div>
+    <ul class="game-container__speacker-left">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    <ul class="game-container__speacker-right">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    <hr class="game-container__finish-left">
+    <hr class="game-container__finish-right">
+    <span class="game-container__detail-left"></span>
+    <span class="game-container__detail-right"></span>
+    <div class="game-container__square top-left"></div>
+    <div class="game-container__square top-right"></div>
+    <div class="game-container__square bottom-left"></div>
+    <div class="game-container__square bottom-right"></div>
+  </container>
 
-          </div>
-        </div>
-
-
-        <nav class="nav_btn">
-          <div class="center">
-            <h1 style="
-    background: initial;
-"> Power </h1>
-            <input checked="" type="checkbox" name="">
-          </div>
-          <div class="buttons_letters">
-            <div class="btn-y">
-              <div class="y">Y</div>
-            </div>
-            <div class="btn-x">
-              <div class="x">X</div>
-            </div>
-            <div class="btn-a">
-              <div class="a">A</div>
-            </div>
-            <div class="btn-b">
-              <div class="b">B</div>
-            </div>
-          </div>
-        </nav>
-      </container>
+  <div class="separator">
+    <div class="hinge-left"></div>
+    <div class="midle">
+      <span class="mic"></span>
+      <span class="mic-2">mic.</span>
+    </div>
+    <div class="hinge-right">
+      <ul>
+        <li class="diod-1"></li>
+        <li class="diod-2"></li>
+      </ul>
     </div>
   </div>
+
+  <container class="selection-container">
+    <nav class="selection-container__nav-btn">
+      <div class="selection-container__nav-btn__directional">
+        <div class="selection-container__nav-btn__directional__top"></div>
+        <div class="selection-container__nav-btn__directional__bottom"></div>
+        <div class="selection-container__nav-btn__directional__left"></div>
+        <div class="selection-container__nav-btn__directional__right"></div>
+        <div class="selection-container__nav-btn__directional__circle"></div>
+      </div>
+    </nav>
+
+    <div class="selection-container__display ">
+      <div class="selection-container__display__screen scrollbar">
+
+      </div>
+    </div>
+
+    <nav class="selection-container__nav-btn">
+      <h1> Power </h1>
+      <input checked="" type="checkbox" name="">
+
+      <div class="selection-container__nav-btn__buttons_letters">
+        <div class="selection-container__nav-btn__buttons_letters__btn-y">
+          <div class="selection-container__nav-btn__buttons_letters__btn-y__y">Y</div>
+        </div>
+        <div class="selection-container__nav-btn__buttons_letters__btn-x">
+          <div class="selection-container__nav-btn__buttons_letters__btn-x__x">X</div>
+        </div>
+        <div class="selection-container__nav-btn__buttons_letters__btn-a">
+          <div class="selection-container__nav-btn__buttons_letters__btn-a__a">A</div>
+        </div>
+        <div class="selection-container__nav-btn__buttons_letters__btn-b">
+          <div class="selection-container__nav-btn__buttons_letters__btn-b__b">B</div>
+        </div>
+      </div>
+    </nav>
+  </container>
+
 </body>
 
 <script src="js/aaa.js"></script>
