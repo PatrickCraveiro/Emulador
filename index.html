@@ -62,8 +62,8 @@
   <container class="selection-container">
     <nav class="selection-container__nav-btn">
       <div class="selection-container__nav-btn__directional">
-        <div class="selection-container__nav-btn__directional__top"></div>
-        <div class="selection-container__nav-btn__directional__bottom"></div>
+        <div class="selection-container__nav-btn__directional__top" onclick="move('cima')"></div>
+        <div class="selection-container__nav-btn__directional__bottom" onclick="move('baixo')"></div>
         <div class="selection-container__nav-btn__directional__left"></div>
         <div class="selection-container__nav-btn__directional__right"></div>
         <div class="selection-container__nav-btn__directional__circle"></div>
@@ -78,7 +78,7 @@
 
     <nav class="selection-container__nav-btn">
       <h1> Power </h1>
-      <input checked="" type="checkbox" name="">
+      <input checked="" type="checkbox" name="" onchange="powerChange(this.checked)">
 
       <div class="selection-container__nav-btn__buttons_letters">
         <div class="selection-container__nav-btn__buttons_letters__btn-y">
@@ -99,6 +99,6 @@
 
 </body>
 
-<script src="js/aaa.js"></script>
+<script src="js/index.js"></script>
 
 </html>
