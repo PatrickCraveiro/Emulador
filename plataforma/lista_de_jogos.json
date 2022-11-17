@@ -1,25 +1,58 @@
 {
   "super nintendo": {
     "roms": [
+      "Aladdin",
+      "Beavis and Butt-Head",
+      "Boogerman",
+      "California Games II",
+      "Casper",
       "Chrono Trigger",
+      "Congo",
       "Dragon Ball Super Butouden 2",
-      "Doom",
+      "Dragon Ball Super Butouden 3",
       "Donkey Kong",
+      "Donkey Kong 2",
+      "Donkey Kong 3",
+      "Doom",
+      "Earthworm Jim",
+      "Goof Troop",
+      "Harvest Moon",
+      "International Superstar Soccer Deluxe",
+      "Joe & Mac 2",
+      "Jungle Book",
       "Legends of zelda",
       "Mario Kart",
+      "Paperboy 2",
+      "Pocky-Rocky",
+      "Road Runner",
+      "Secret of Mana",
+      "Shadowrun",
+      "Simpsons, The - Bart's Nightmare",
+      "Super Bomberman 3",
       "Super Bomberman 5",
-      "Super Mario Bros"
+      "Super Mario Bros",
+      "Super Mario World",
+      "Syodai Nekketsu Kouha Kunio kun",
+      "Ultimate Mortal Kombat 3",
+      "Uniracers",
+      "Wild Guns",
+      "Zombies Ate My Neighbors"
     ],
-    "extensao": "md",
-    "emulador": "Fusion"
+    "extensao": "smc",
+    "emulador": "SNES"
   },
   "mega drive": {
     "roms": [
+      "Bonanza Bros",
+      "California Games",
+      "Columns",
+      "Columns 3",
+      "Decap Attack",
+      "Golden Axe",
+      "Golden Axe III",
       "Sonic The Hedgehog 2",
       "Sonic The Hedgehog 3",
-      "Golden Axe",
-      "Bonanza Bros",
-      "Decap Attack"
+      "Streets of Rage"
     ],
     "extensao": "md",
     "emulador": "Fusion"
