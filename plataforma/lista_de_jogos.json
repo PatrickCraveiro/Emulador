@@ -33,6 +33,7 @@
       "Super Mario Bros",
       "Super Mario World",
       "Syodai Nekketsu Kouha Kunio kun",
+      "Top Gear",
       "Ultimate Mortal Kombat 3",
       "Uniracers",
       "Wild Guns",
@@ -43,6 +44,7 @@
   },
   "mega drive": {
     "roms": [
+      "Altered beast",
       "Bonanza Bros",
       "California Games",
       "Columns",
@@ -55,6 +57,13 @@
       "Streets of Rage"
     ],
     "extensao": "md",
+    "emulador": "Fusion"
+  },
+  "master system": {
+    "roms": [
+      "Spider man"
+    ],
+    "extensao": "sms",
     "emulador": "Fusion"
   }
 }
