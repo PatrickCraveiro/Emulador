@@ -1,7 +1,7 @@
-Reading config file C:\Users\bill_\Documents\Nova pasta\Emulador\plataforma\emulador\super nintendo\snes9x-1.60-win32-x64\snes9x.conf.
-Saving	config file	C:\Users\bill_\Documents\Nova pasta\Emulador\plataforma\emulador\super nintendo\snes9x-1.60-win32-x64\snes9x.conf
+Reading config file D:\projetos\Emulador\plataforma\emulador\super nintendo\snes9x-1.60-win32-x64\snes9x.conf.
+Saving	config file	D:\projetos\Emulador\plataforma\emulador\super nintendo\snes9x-1.60-win32-x64\snes9x.conf
 No ROM file header found.
-Map_LoROMMap
-"______________________" [bad checksum] LoROM, Corrupt, ROM+RAM+BAT, NTSC, SRAM:Corrupt, ID:____, CRC32:B3EA2F1D
-Saving	config file	C:\Users\bill_\Documents\Nova pasta\Emulador\plataforma\emulador\super nintendo\snes9x-1.60-win32-x64\snes9x.conf
-Saving	config file	C:\Users\bill_\Documents\Nova pasta\Emulador\plataforma\emulador\super nintendo\snes9x-1.60-win32-x64\snes9x.conf
+Map_HiROMMap
+"EARTHWORM JIM" [checksum ok] HiROM, 32Mbits, ROM, NTSC, SRAM:0Kbits, ID:AEJE, CRC32:3A4A47EB
+Saving	config file	D:\projetos\Emulador\plataforma\emulador\super nintendo\snes9x-1.60-win32-x64\snes9x.conf
+Saving	config file	D:\projetos\Emulador\plataforma\emulador\super nintendo\snes9x-1.60-win32-x64\snes9x.conf
