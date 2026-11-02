@@ -18,6 +18,8 @@ export interface Platform {
 
 export interface Library {
   platforms: Platform[]
+  /** Faixas da música ambiente do menu (protocolo `music://`), em ordem. */
+  music: string[]
   /** Erro que impediu a leitura da biblioteca (ex.: `plataformas.json` inválido). */
   error?: string
 }

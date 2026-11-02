@@ -17,6 +17,7 @@ Ele lê as ROMs de uma pasta, mostra a capa animada do jogo na tela de cima e ab
 - **Oito cores de console** (aqua, rosa, roxo, vermelho, amarelo, verde, branco e preto), trocadas pelo SELECT.
 - **Filtro CRT:** o slider ao lado da tela de cima adiciona scanlines de TV de tubo à capa.
 - **Botão Power:** desliga as telas com efeito de estática e liga com animação de boot.
+- **Música ambiente** no menu, que some sozinha quando um jogo abre e volta quando o launcher volta à frente. Liga e desliga pelo B ou clicando nos alto-falantes. Toque as suas músicas colocando-as na pasta `musica/` da biblioteca.
 - **Janela ajustável:** cabe em telas menores automaticamente e aceita zoom com Ctrl + roda do mouse.
 - **Lembra o último jogo, a cor, o filtro e o tamanho da janela** entre uma sessão e outra.
 - **Mensagens claras de erro e configuração:** emulador ausente, pasta vazia, JSON inválido.
@@ -61,6 +62,8 @@ plataforma/
 │       └── Aladdin.gif
 ├── emulador/               ← emuladores (Snes9x, Kega Fusion e mGBA), com seus saves
 │   └── super nintendo/snes9x-1.60-win32-x64/snes9x-x64.exe
+├── musica/                 ← música ambiente do menu (.ogg, .mp3, .m4a, .flac, .wav)
+│   └── Heavenly Loop.ogg
 └── roms/                   ← ROMs, uma pasta por plataforma
     ├── super nintendo/
     │   ├── Super Mario World/Super Mario World.smc
@@ -159,6 +162,7 @@ Jogos sem capa ganham um cartão gerado automaticamente, com o nome do jogo.
 | Recarregar a lista      | F5                        | X                  | Botão X                                 |
 | Jogo aleatório          | —                         | Y                  | Botão Y                                 |
 | Trocar a cor do console | —                         | Select             | Botão SELECT                            |
+| Música ambiente         | —                         | B                  | Botão B ou os alto-falantes             |
 | Filtro CRT              | —                         | —                  | Slider "CRT" ao lado da tela de cima    |
 | Ligar / desligar        | Tab até o POWER + Enter   | —                  | Botão POWER                             |
 | Minimizar               | —                         | Home / Guide       | Botão HOME ou "–" no canto              |
@@ -233,3 +237,5 @@ src/
 ## Licença
 
 ISC © Patrick Craveiro
+
+A música ambiente que vem com o app, [Heavenly Loop](https://opengameart.org/content/heavenly-loop), é de isaiah658 e está em domínio público (CC0), publicada no OpenGameArt.

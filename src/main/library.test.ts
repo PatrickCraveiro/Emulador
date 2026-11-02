@@ -130,6 +130,16 @@ describe('scanLibrary', () => {
     expect(md.maximize).toBe(false)
   })
 
+  it('lista as faixas de áudio da pasta de música, em ordem', async () => {
+    await writeConfig([{ id: 'snes', romsDir: 'roms', extensions: ['.smc'] }])
+    await write('musica/Tema 2.mp3')
+    await write('musica/Tema 10.OGG')
+    await write('musica/créditos.txt')
+
+    const { library } = await scanLibrary(root)
+    expect(library.music).toEqual(['music://track/Tema%202.mp3', 'music://track/Tema%2010.OGG'])
+  })
+
   it('gera ids estáveis entre leituras', async () => {
     await writeConfig([{ id: 'snes', romsDir: 'roms', extensions: ['.smc'] }])
     await write('roms/Doom.smc')

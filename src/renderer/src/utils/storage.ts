@@ -22,6 +22,10 @@ export function isSelection(value: unknown): value is Selection {
   return typeof v?.platformId === 'string' && typeof v?.gameId === 'string'
 }
 
+export function isBoolean(value: unknown): value is boolean {
+  return typeof value === 'boolean'
+}
+
 export function isPercentage(value: unknown): value is number {
   return typeof value === 'number' && value >= 0 && value <= 100
 }

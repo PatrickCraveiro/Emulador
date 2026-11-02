@@ -10,12 +10,20 @@ import { Lid } from './components/Lid'
 import { PowerButton } from './components/PowerButton'
 import { SystemButtons } from './components/SystemButtons'
 import { TopScreen } from './components/TopScreen'
+import { useBackgroundMusic } from './hooks/useBackgroundMusic'
 import { useControls } from './hooks/useControls'
 import { useLibrary } from './hooks/useLibrary'
 import { useToast } from './hooks/useToast'
 import { isThemeId, nextTheme, type ThemeId } from './themes'
 import type { Action, PowerState } from './types'
-import { isPercentage, isSelection, loadPreference, savePreference, type Selection } from './utils/storage'
+import {
+  isBoolean,
+  isPercentage,
+  isSelection,
+  loadPreference,
+  savePreference,
+  type Selection
+} from './utils/storage'
 
 const BOOT_MS = 1100
 const SHUTDOWN_MS = 1500
@@ -35,6 +43,7 @@ export default function App() {
   )
   const [theme, setTheme] = useState<ThemeId>(() => loadPreference('tema', isThemeId, 'aqua'))
   const [crt, setCrt] = useState(() => loadPreference('crt', isPercentage, 0))
+  const [music, setMusic] = useState(() => loadPreference('musica', isBoolean, true))
   const [power, setPower] = useState<PowerState>('booting')
   const [pressed, setPressed] = useState<Action | null>(null)
   const [busy, setBusy] = useState(false)
@@ -57,6 +66,9 @@ export default function App() {
 
   useEffect(() => savePreference('tema', theme), [theme])
   useEffect(() => savePreference('crt', crt), [crt])
+  useEffect(() => savePreference('musica', music), [music])
+
+  useBackgroundMusic(library?.music ?? [], isOn && music)
 
   // Animação de boot ao abrir o app.
   useEffect(() => {
@@ -126,6 +138,14 @@ export default function App() {
     showToast(`Cor do console: ${next.name}`)
   }
 
+  function toggleMusic() {
+    const next = !music
+    setMusic(next)
+    if (!next) showToast('Música desligada')
+    else if (library?.music.length === 0) showToast('Música ligada, mas a pasta "musica" da biblioteca está vazia')
+    else showToast('Música ligada')
+  }
+
   function handleAction(action: Action) {
     if (!isOn) return
 
@@ -162,7 +182,7 @@ export default function App() {
       case 'home':
         return window.emulador.minimizeWindow()
       case 'b':
-        return
+        return toggleMusic()
     }
   }
 
@@ -181,7 +201,7 @@ export default function App() {
 
   return (
     <main className="console" data-theme={theme}>
-      <Lid crt={crt} onCrtChange={setCrt}>
+      <Lid crt={crt} onCrtChange={setCrt} music={music} onToggleMusic={() => handleAction('b')}>
         <TopScreen power={power} game={game} platformName={platform?.name} toast={toast} crt={crt} />
       </Lid>
       <Hinge on={power !== 'off' && power !== 'shutting-down'} busy={busy} />

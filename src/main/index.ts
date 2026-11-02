@@ -6,7 +6,14 @@ import type { LaunchResult, Library } from '@shared/types'
 import iconIco from '../../resources/icon.ico?asset'
 import iconPng from '../../resources/icon.png?asset'
 import { launchGame } from './launcher'
-import { COVER_PROTOCOL, scanLibrary, type GameEntry } from './library'
+import {
+  COVER_PROTOCOL,
+  MUSIC_DIR,
+  MUSIC_EXTENSIONS,
+  MUSIC_PROTOCOL,
+  scanLibrary,
+  type GameEntry
+} from './library'
 import { syncBundledLibrary } from './librarySync'
 import { enableScaling, initialScale, windowSize } from './windowScale'
 
@@ -79,7 +86,7 @@ function registerIpc(): void {
   ipcMain.handle(IPC.getLibrary, async (): Promise<Library> => {
     await libraryReady
     if (libraryError) {
-      return { platforms: [], error: `Não foi possível preparar a biblioteca: ${libraryError.message}` }
+      return { platforms: [], music: [], error: `Não foi possível preparar a biblioteca: ${libraryError.message}` }
     }
     const result = await scanLibrary(libraryRoot())
     games = result.entries
@@ -109,8 +116,22 @@ function registerCoverProtocol(): void {
   })
 }
 
+/** Serve as faixas da pasta de música; só o nome do arquivo vale, sem subir de pasta. */
+function registerMusicProtocol(): void {
+  protocol.handle(MUSIC_PROTOCOL, async (request) => {
+    const name = path.basename(decodeURIComponent(new URL(request.url).pathname))
+    if (!MUSIC_EXTENSIONS.includes(path.extname(name).toLowerCase())) return new Response(null, { status: 404 })
+    const file = await net.fetch(pathToFileURL(path.join(libraryRoot(), MUSIC_DIR, name)).toString())
+    // A interface lê a faixa com fetch() a partir da origem file://, o que exige CORS.
+    const headers = new Headers(file.headers)
+    headers.set('Access-Control-Allow-Origin', '*')
+    return new Response(file.body, { status: file.status, headers })
+  })
+}
+
 protocol.registerSchemesAsPrivileged([
-  { scheme: COVER_PROTOCOL, privileges: { standard: true, secure: true, supportFetchAPI: true } }
+  { scheme: COVER_PROTOCOL, privileges: { standard: true, secure: true, supportFetchAPI: true } },
+  { scheme: MUSIC_PROTOCOL, privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } }
 ])
 
 // A trava de instância única e as preferências ficam na pasta de dados. Em desenvolvimento
@@ -148,6 +169,7 @@ if (!app.requestSingleInstanceLock()) {
     })
     registerIpc()
     registerCoverProtocol()
+    registerMusicProtocol()
     createWindow()
   })
 

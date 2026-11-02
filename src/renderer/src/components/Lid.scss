@@ -63,14 +63,26 @@
     }
   }
 
-  // Furinhos do alto-falante.
+  // Furinhos do alto-falante; um clique liga ou desliga a música ambiente.
   &__speaker {
     position: absolute;
     top: 196px;
     width: 36px;
     height: 54px;
+    padding: 0;
+    border: 0;
     background: radial-gradient(circle, rgba(0, 0, 0, 0.55) 1.7px, rgba(255, 255, 255, 0.35) 2.3px, transparent 2.6px)
       0 0 / 9px 9px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+      filter: brightness(1.25);
+    }
+
+    &.is-muted {
+      opacity: 0.35;
+    }
 
     &--left {
       left: 48px;

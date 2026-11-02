@@ -8,7 +8,7 @@ export function useLibrary() {
     try {
       setLibrary(await window.emulador.getLibrary())
     } catch (error) {
-      setLibrary({ platforms: [], error: `Erro ao ler a biblioteca: ${(error as Error).message}` })
+      setLibrary({ platforms: [], music: [], error: `Erro ao ler a biblioteca: ${(error as Error).message}` })
     }
   }, [])
 

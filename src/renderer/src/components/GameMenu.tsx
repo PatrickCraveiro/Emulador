@@ -79,6 +79,7 @@ export function GameMenu({ on, library, platform, canSwitchPlatform, onSwitchPla
         <Hint button="a">Jogar</Hint>
         <Hint button="x">Recarregar</Hint>
         <Hint button="y">Aleatório</Hint>
+        <Hint button="b">Música</Hint>
         <span className="menu__hint">
           <span className="menu__hint-pill">Select</span>
           Cor

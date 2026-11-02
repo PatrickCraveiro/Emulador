@@ -7,7 +7,7 @@ const BUTTONS: Array<{ id: FaceButton; hint?: string }> = [
   { id: 'x', hint: 'Recarregar lista' },
   { id: 'y', hint: 'Jogo aleatório' },
   { id: 'a', hint: 'Jogar' },
-  { id: 'b' }
+  { id: 'b', hint: 'Música ambiente' }
 ]
 
 interface Props {

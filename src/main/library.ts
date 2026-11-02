@@ -6,6 +6,10 @@ import type { Game, Library, Platform } from '@shared/types'
 export const CONFIG_FILE = 'plataformas.json'
 export const COVERS_DIR = 'capas'
 export const COVER_PROTOCOL = 'cover'
+/** Música ambiente do menu: todos os arquivos de áudio desta pasta, em ordem alfabética. */
+export const MUSIC_DIR = 'musica'
+export const MUSIC_PROTOCOL = 'music'
+export const MUSIC_EXTENSIONS = ['.ogg', '.opus', '.mp3', '.m4a', '.flac', '.wav']
 
 const COVER_EXTENSIONS = ['.gif', '.webp', '.png', '.jpg', '.jpeg', '.avif']
 // roms/<plataforma>/<arquivo> ou roms/<plataforma>/<pasta do jogo>/<arquivo>
@@ -43,19 +47,29 @@ export interface ScanResult {
 
 export async function scanLibrary(root: string): Promise<ScanResult> {
   const entries = new Map<string, GameEntry>()
+  const music = await listMusic(root)
 
   let configs: PlatformConfig[]
   try {
     configs = await loadConfig(root)
   } catch (error) {
-    return { library: { platforms: [], error: (error as Error).message }, entries }
+    return { library: { platforms: [], music, error: (error as Error).message }, entries }
   }
 
   const covers = await indexCovers(path.join(root, COVERS_DIR))
   const platforms = await Promise.all(
     configs.map((config) => scanPlatform(root, config, covers, entries))
   )
-  return { library: { platforms }, entries }
+  return { library: { platforms, music }, entries }
+}
+
+/** URLs (protocolo `music://`) das faixas da pasta de música. */
+async function listMusic(root: string): Promise<string[]> {
+  const files = (await listFiles(path.join(root, MUSIC_DIR), 0))
+    .map((file) => path.basename(file))
+    .filter((name) => MUSIC_EXTENSIONS.includes(path.extname(name).toLowerCase()))
+  files.sort(collator.compare)
+  return files.map((name) => `${MUSIC_PROTOCOL}://track/${encodeURIComponent(name)}`)
 }
 
 export async function loadConfig(root: string): Promise<PlatformConfig[]> {
