@@ -166,6 +166,25 @@ Jogos sem capa ganham um cartão gerado automaticamente, com o nome do jogo.
 
 No controle, o A é o botão de baixo (padrão de controles de Xbox e da maioria dos controles de PC). O controle só é lido enquanto a janela do launcher está em foco, então os botões apertados durante o jogo não abrem outro jogo por trás.
 
+### Nos jogos (teclado)
+
+Os três emuladores usam o mesmo teclado: W A S D para andar, J K L como botões principais e U I O como os extras.
+
+| Tecla   | Super Nintendo | Mega Drive | Game Boy Advance |
+| ------- | -------------- | ---------- | ---------------- |
+| W A S D | Direcional     | Direcional | Direcional       |
+| J       | B              | A          | B                |
+| K       | A              | B          | A                |
+| L       | Y              | C          | —                |
+| I       | X              | X          | —                |
+| U       | L              | Y          | L                |
+| O       | R              | Z          | R                |
+| Enter   | Start          | Start      | Start            |
+| Shift   | Select         | —          | Select           |
+| Ctrl    | —              | Mode       | —                |
+
+No Mega Drive, X, Y, Z e Mode só existem no controle de 6 botões; a porta 1 do Kega Fusion está com o de 3 botões, o original.
+
 ## Instalador para Windows
 
 ```bash
@@ -182,7 +201,7 @@ Depois de alguns minutos (o instalador comprime cerca de 400 MB), gera `dist/Emu
 
 Na primeira execução, a biblioteca que vem no instalador é copiada para `%APPDATA%\Emulador\biblioteca`. É nessa pasta que o app instalado procura as ROMs e onde os emuladores gravam os saves. O **ícone de pasta**, no alto do console, abre a biblioteca para adicionar ROMs e capas.
 
-- **Atualizar** (instalar uma versão mais nova por cima): os jogos e capas novos são acrescentados, e nada que já existe é sobrescrito. Saves, configurações dos emuladores e ROMs adicionadas por você são preservados. O `plataformas.json` só é atualizado se você não o tiver editado.
+- **Atualizar** (instalar uma versão mais nova por cima): os jogos e capas novos são acrescentados, e nada que já existe é sobrescrito. Saves, configurações dos emuladores e ROMs adicionadas por você são preservados. O `plataformas.json` só é atualizado se você não o tiver editado. Das configurações dos emuladores, só as linhas do mapeamento do teclado são atualizadas, e só quando a versão nova traz um mapeamento diferente da anterior.
 - **Desinstalar** (Configurações → Aplicativos): remove o app, mas mantém a biblioteca. Para apagar tudo, exclua também a pasta `%APPDATA%\Emulador`.
 
 Na cópia que vai no instalador, as posições de janela salvas pelos emuladores são zeradas (veja [scripts/afterPack.cjs](scripts/afterPack.cjs)), para que eles não abram fora da tela em um PC com outra configuração de monitores.
