@@ -136,7 +136,10 @@ if (!app.requestSingleInstanceLock()) {
   })
 
   app.whenReady().then(() => {
-    app.setAppUserModelId('com.patrickcraveiro.emulador')
+    // O atalho do app instalado leva este id, e a barra de tarefas desenha a janela com o
+    // ícone do atalho. A cópia de desenvolvimento usa outro id para mostrar o próprio ícone
+    // (e não se juntar ao botão do app instalado).
+    app.setAppUserModelId(app.isPackaged ? 'com.patrickcraveiro.emulador' : 'com.patrickcraveiro.emulador.dev')
     if (app.isPackaged) Menu.setApplicationMenu(null)
     // Na primeira execução a cópia leva alguns segundos: a janela abre logo e a lista
     // aparece quando a biblioteca estiver pronta.
