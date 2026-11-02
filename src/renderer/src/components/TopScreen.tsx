@@ -68,7 +68,7 @@ function CoverCard({ game, platformName }: { game: Game; platformName?: string }
       </svg>
       {platformName && <span className="cover-card__platform">{platformName}</span>}
       <strong className="cover-card__title">{game.title}</strong>
-      <span className="cover-card__hint">Sem capa · coloque uma imagem em plataforma/capas</span>
+      <span className="cover-card__hint">Sem capa · adicione uma imagem na pasta capas da biblioteca</span>
     </div>
   )
 }

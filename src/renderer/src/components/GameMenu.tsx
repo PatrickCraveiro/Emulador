@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import type { Game, Library, Platform } from '@shared/types'
 import type { FaceButton } from '../types'
 import { cx } from '../utils/cx'
@@ -55,18 +55,21 @@ export function GameMenu({ on, library, platform, canSwitchPlatform, onSwitchPla
       {platform?.warning && games.length > 0 && <p className="menu__warning">{platform.warning}</p>}
 
       {library === null ? (
-        <Message title="Carregando…" />
+        <LoadingMessage />
       ) : library.error ? (
         <Message title="Não foi possível ler a biblioteca" detail={library.error} />
       ) : !platform ? (
         <Message
           title="Nenhuma plataforma configurada"
-          detail="Adicione plataformas em plataforma/plataformas.json."
+          detail="Adicione plataformas no arquivo plataformas.json da biblioteca."
         />
       ) : games.length === 0 ? (
         <Message
           title="Nenhum jogo encontrado"
-          detail={platform.warning ?? `Coloque as ROMs em plataforma/${platform.romsDir}`}
+          detail={
+            platform.warning ??
+            `Coloque as ROMs na pasta "${platform.romsDir}" da biblioteca (ícone de pasta, no alto do console).`
+          }
         />
       ) : (
         <GameList games={games} {...listProps} />
@@ -134,6 +137,23 @@ function GameList({ games, selectedIndex, onSelect, onLaunch }: GameListProps) {
         </li>
       ))}
     </ul>
+  )
+}
+
+/** Se a primeira carga demorar (cópia da biblioteca, antivírus), explica o que está acontecendo. */
+function LoadingMessage() {
+  const [slow, setSlow] = useState(false)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSlow(true), 2000)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  return (
+    <Message
+      title="Carregando…"
+      detail={slow ? 'Na primeira vez, os jogos são copiados para este computador. Isso pode levar alguns segundos.' : undefined}
+    />
   )
 }
 

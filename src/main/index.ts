@@ -1,23 +1,39 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { app, BrowserWindow, ipcMain, Menu, net, protocol } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, net, protocol, shell } from 'electron'
 import { IPC } from '@shared/ipc'
-import type { LaunchResult } from '@shared/types'
+import type { LaunchResult, Library } from '@shared/types'
 import icon from '../../resources/icon.png?asset'
 import { launchGame } from './launcher'
 import { COVER_PROTOCOL, scanLibrary, type GameEntry } from './library'
+import { syncBundledLibrary } from './librarySync'
 import { enableScaling, initialScale, windowSize } from './windowScale'
 
 /** Jogos da última leitura da biblioteca, indexados por id. */
 let games = new Map<string, GameEntry>()
 
+/** Cópia da biblioteca do instalador para a pasta do usuário (só no app instalado). */
+let libraryReady: Promise<void> = Promise.resolve()
+let libraryError: Error | null = null
+
 /**
- * Pasta com `plataformas.json`, ROMs, emuladores e capas. Em desenvolvimento fica
- * na raiz do projeto; no app empacotado, ao lado do executável.
+ * Pasta com `plataformas.json`, ROMs, emuladores e capas. Em desenvolvimento é a pasta
+ * `plataforma/` do projeto. No app instalado fica na pasta de dados do usuário: assim
+ * sobrevive a atualizações e à desinstalação, e os emuladores podem gravar os saves.
  */
 function libraryRoot(): string {
-  const base = app.isPackaged ? path.dirname(app.getPath('exe')) : app.getAppPath()
-  return path.join(base, 'plataforma')
+  return app.isPackaged
+    ? path.join(app.getPath('userData'), 'biblioteca')
+    : path.join(app.getAppPath(), 'plataforma')
+}
+
+async function prepareLibrary(): Promise<void> {
+  if (!app.isPackaged) return
+  await syncBundledLibrary(
+    path.join(process.resourcesPath, 'plataforma'),
+    libraryRoot(),
+    path.join(app.getPath('userData'), 'plataformas.instalado.json')
+  )
 }
 
 function createWindow(): BrowserWindow {
@@ -55,7 +71,11 @@ function createWindow(): BrowserWindow {
 }
 
 function registerIpc(): void {
-  ipcMain.handle(IPC.getLibrary, async () => {
+  ipcMain.handle(IPC.getLibrary, async (): Promise<Library> => {
+    await libraryReady
+    if (libraryError) {
+      return { platforms: [], error: `Não foi possível preparar a biblioteca: ${libraryError.message}` }
+    }
     const result = await scanLibrary(libraryRoot())
     games = result.entries
     return result.library
@@ -67,6 +87,9 @@ function registerIpc(): void {
     return launchGame(entry)
   })
 
+  ipcMain.on(IPC.openLibraryFolder, () => {
+    void libraryReady.then(() => shell.openPath(libraryRoot()))
+  })
   ipcMain.on(IPC.minimizeWindow, (event) => BrowserWindow.fromWebContents(event.sender)?.minimize())
   ipcMain.on(IPC.closeWindow, (event) => BrowserWindow.fromWebContents(event.sender)?.close())
 }
@@ -104,6 +127,11 @@ if (!app.requestSingleInstanceLock()) {
   app.whenReady().then(() => {
     app.setAppUserModelId('com.patrickcraveiro.emulador')
     if (app.isPackaged) Menu.setApplicationMenu(null)
+    // Na primeira execução a cópia leva alguns segundos: a janela abre logo e a lista
+    // aparece quando a biblioteca estiver pronta.
+    libraryReady = prepareLibrary().catch((error: Error) => {
+      libraryError = error
+    })
     registerIpc()
     registerCoverProtocol()
     createWindow()

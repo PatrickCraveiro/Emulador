@@ -45,11 +45,12 @@ Pronto: os jogos já aparecem na lista e abrem com Enter. O `npm run dev` també
 | `npm test`          | Roda os testes (Vitest)                                    |
 | `npm run typecheck` | Verifica os tipos do TypeScript                            |
 | `npm run build`     | Verifica os tipos e compila para a pasta `out/`            |
-| `npm run dist`      | Gera o app para Windows em `dist/` (pasta e `.zip`)        |
+| `npm run dist`      | Gera o instalador para Windows em `dist/`                  |
+| `npm run dist:dir`  | Gera só a pasta do app (`dist/win-unpacked`), para testes  |
 
 ## Montando a biblioteca
 
-Tudo o que é "conteúdo" fica na pasta `plataforma/`:
+Tudo o que é "conteúdo" fica na pasta `plataforma/` (no app instalado, a biblioteca fica em outra pasta; veja [Instalador para Windows](#instalador-para-windows)):
 
 ```
 plataforma/
@@ -163,15 +164,26 @@ Jogos sem capa ganham um cartão gerado automaticamente, com o nome do jogo.
 
 No controle, o A é o botão de baixo (padrão de controles de Xbox e da maioria dos controles de PC). O controle só é lido enquanto a janela do launcher está em foco, então os botões apertados durante o jogo não abrem outro jogo por trás.
 
-## Gerando o executável
+## Instalador para Windows
 
 ```bash
 npm run dist
 ```
 
-O resultado fica em `dist/win-unpacked/` (e compactado em `dist/Emulador-<versão>-win.zip`), com a pasta `plataforma/` completa (ROMs, emuladores e capas) ao lado do `Emulador.exe`. Basta abrir e jogar, e novos jogos podem ser adicionados direto nessa pasta.
+Gera `dist/Emulador-Setup-<versão>.exe`, um instalador único com o app, os emuladores, as ROMs e as capas. Para instalar em qualquer PC (inclusive em outro computador), é só copiar esse arquivo e dar dois cliques:
 
-> Os saves de quem joga pela versão empacotada ficam na cópia dos emuladores dentro de `dist/`. Rodar `npm run dist` de novo sobrescreve essa pasta, então faça backup dos saves antes.
+- A instalação é por usuário e **não pede senha de administrador**.
+- Cria atalhos na **área de trabalho** e no menu Iniciar, e abre o app ao terminar.
+- O instalador não é assinado digitalmente, então o Windows pode mostrar "O Windows protegeu o computador". Clique em **Mais informações → Executar assim mesmo**.
+
+### Onde ficam os jogos e os saves
+
+Na primeira execução, a biblioteca que vem no instalador é copiada para `%APPDATA%\Emulador\biblioteca`. É nessa pasta que o app instalado procura as ROMs e onde os emuladores gravam os saves. O **ícone de pasta**, no alto do console, abre a biblioteca para adicionar ROMs e capas.
+
+- **Atualizar** (instalar uma versão mais nova por cima): os jogos e capas novos são acrescentados, e nada que já existe é sobrescrito. Saves, configurações dos emuladores e ROMs adicionadas por você são preservados. O `plataformas.json` só é atualizado se você não o tiver editado.
+- **Desinstalar** (Configurações → Aplicativos): remove o app, mas mantém a biblioteca. Para apagar tudo, exclua também a pasta `%APPDATA%\Emulador`.
+
+Na cópia que vai no instalador, as posições de janela salvas pelos emuladores são zeradas (veja [scripts/afterPack.cjs](scripts/afterPack.cjs)), para que eles não abram fora da tela em um PC com outra configuração de monitores.
 
 ## Estrutura do projeto
 
@@ -181,6 +193,7 @@ src/
 │   ├── index.ts       janela, IPC e protocolo cover:// para servir as capas
 │   ├── library.ts     varredura de ROMs/capas e validação do plataformas.json
 │   ├── launcher.ts    abre o emulador como processo independente
+│   ├── librarySync.ts cópia da biblioteca do instalador para a pasta do usuário
 │   └── windowScale.ts tamanho da janela e zoom (Ctrl + roda)
 ├── preload/       Ponte segura entre o processo principal e a interface (window.emulador)
 ├── renderer/      Interface em React

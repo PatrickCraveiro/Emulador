@@ -28,6 +28,8 @@ export type LaunchResult = { ok: true } | { ok: false; error: string }
 export interface EmuladorApi {
   getLibrary(): Promise<Library>
   launchGame(gameId: string): Promise<LaunchResult>
+  /** Abre a pasta da biblioteca no Explorer (para adicionar ROMs e capas). */
+  openLibraryFolder(): void
   minimizeWindow(): void
   closeWindow(): void
 }

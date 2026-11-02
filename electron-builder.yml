@@ -8,13 +8,25 @@ files:
   - resources/**
 asarUnpack:
   - resources/**
-# A biblioteca (ROMs, emuladores e capas) fica ao lado do .exe, fora do pacote,
-# para que novos jogos possam ser adicionados sem gerar o app de novo.
-extraFiles:
+# Biblioteca (ROMs, emuladores e capas) que acompanha o app. Na primeira execução ela é
+# copiada para a pasta de dados do usuário (%APPDATA%\Emulador\biblioteca), onde os saves
+# ficam a salvo de atualizações e da desinstalação.
+extraResources:
   - from: plataforma
     to: plataforma
+afterPack: scripts/afterPack.cjs
 win:
   icon: resources/icon.png
   target:
-    - target: zip
+    - target: nsis
       arch: x64
+# Instalador de um clique, por usuário (não pede senha de administrador), com atalhos na
+# área de trabalho e no menu Iniciar.
+nsis:
+  oneClick: true
+  perMachine: false
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: Emulador
+  deleteAppDataOnUninstall: false
+  artifactName: ${productName}-Setup-${version}.${ext}

@@ -18,6 +18,18 @@ export function Lid({ crt, onCrtChange, children }: Props) {
         <button
           type="button"
           className="lid__window-button"
+          title="Abrir a pasta da biblioteca (ROMs e capas)"
+          aria-label="Abrir a pasta da biblioteca"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => window.emulador.openLibraryFolder()}
+        >
+          <svg viewBox="0 0 10 10" aria-hidden="true">
+            <path d="M1.5 3V8h7V4H5L4 3Z" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          className="lid__window-button"
           title="Minimizar"
           aria-label="Minimizar"
           onMouseDown={(event) => event.preventDefault()}
