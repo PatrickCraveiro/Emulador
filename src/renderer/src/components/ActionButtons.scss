@@ -1,70 +1,89 @@
+@use 'sass:list';
 @use '../styles/mixins' as *;
 
-$size: 40px;
+$size: 46px;
+$gap: 50px; // distância do centro do losango até o centro de cada botão
 
-// Losango Y/X/B/A, na mesma disposição de um controle de Xbox.
 .action-buttons {
   position: absolute;
-  top: 174px;
-  left: 50%;
-  width: 138px;
-  height: 130px;
-  transform: translateX(-50%);
+  top: 52px;
+  left: 682px;
+  width: $gap * 2 + $size;
+  height: $gap * 2 + $size;
+
+  &__socket {
+    @include socket;
+    position: absolute;
+    width: $size + 8px;
+    height: $size + 8px;
+    margin: -4px;
+    padding: 4px;
+    border-radius: 50%;
+
+    &--x {
+      top: 0;
+      left: $gap;
+    }
+
+    &--y {
+      top: $gap;
+      left: 0;
+    }
+
+    &--a {
+      top: $gap;
+      left: $gap * 2;
+    }
+
+    &--b {
+      top: $gap * 2;
+      left: $gap;
+    }
+  }
 
   &__button {
-    position: absolute;
     display: grid;
     place-items: center;
     width: $size;
     height: $size;
-    border: 1px solid #090909;
     border-radius: 50%;
-    background:
-      radial-gradient(
-          93% 98% at 100% 20%,
-          rgba(247, 247, 247, 0.3) 50%,
-          rgba(255, 76, 77, 0) 52%
-        )
-        110% 125% / 100% 100% no-repeat,
-      #090909;
-    box-shadow: -3px 2px 5px 1px #000000b8;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 25px;
-    font-weight: bold;
+    background: radial-gradient(
+      circle at 36% 30%,
+      color-mix(in srgb, var(--face) 55%, white) 0%,
+      var(--face) 42%,
+      color-mix(in srgb, var(--face) 72%, black) 100%
+    );
+    box-shadow:
+      0 3px 0 color-mix(in srgb, var(--face) 50%, black),
+      0 5px 7px rgba(0, 0, 0, 0.4),
+      inset 0 1px 1px rgba(255, 255, 255, 0.55);
+    color: var(--face-ink);
+    font-size: 18px;
+    font-weight: 800;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
     transition:
-      transform 0.08s,
-      box-shadow 0.08s;
+      transform 0.07s,
+      box-shadow 0.07s,
+      filter 0.15s;
+
+    &:hover {
+      filter: brightness(1.06);
+    }
 
     &.is-pressed,
     &:active {
-      transform: translateY(1px) scale(0.95);
-      box-shadow: -1px 1px 2px 0 #000000b8;
+      transform: translateY(3px);
+      box-shadow:
+        0 0 0 color-mix(in srgb, var(--face) 50%, black),
+        0 1px 2px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.4);
     }
 
-    @each $id, $color in $button-colors {
+    @each $id, $colors in $face-buttons {
       &--#{$id} {
-        color: $color;
+        --face: #{list.nth($colors, 1)};
+        --face-ink: #{list.nth($colors, 2)};
       }
-    }
-
-    &--y {
-      top: 0;
-      left: 49px;
-    }
-
-    &--x {
-      top: 45px;
-      left: 0;
-    }
-
-    &--b {
-      top: 45px;
-      left: 98px;
-    }
-
-    &--a {
-      top: 90px;
-      left: 49px;
     }
   }
 }

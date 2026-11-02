@@ -1,24 +1,55 @@
-$arm: 35px;
+@use '../styles/mixins' as *;
+
+$arm: 36px;
 
 .dpad {
   position: absolute;
-  top: 187px;
-  left: 50%;
-  display: grid;
-  grid-template: repeat(3, $arm) / repeat(3, $arm);
-  transform: translateX(-50%);
-  filter: drop-shadow(-6px 6px 6px rgba(0, 0, 0, 0.35));
+  top: 196px;
+  left: 50px;
+  width: $arm * 3;
+  height: $arm * 3;
+
+  // Encaixe em cruz na carcaça
+  &::before,
+  &::after {
+    @include socket;
+    content: '';
+    position: absolute;
+    border-radius: 10px;
+  }
+
+  &::before {
+    top: $arm - 4px;
+    left: -4px;
+    width: $arm * 3 + 8px;
+    height: $arm + 8px;
+  }
+
+  &::after {
+    top: -4px;
+    left: $arm - 4px;
+    width: $arm + 8px;
+    height: $arm * 3 + 8px;
+  }
+
+  &__cross {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template: repeat(3, $arm) / repeat(3, $arm);
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.4));
+  }
 
   &__arm,
   &__center {
     position: relative;
-    background-color: #151515;
+    background: linear-gradient(180deg, #43464d, #27292e);
   }
 
   &__arm {
-    transition: background-color 0.1s;
+    transition: transform 0.08s;
 
-    // Setinha em relevo em cada direção.
+    // Seta em baixo-relevo
     &::after {
       content: '';
       position: absolute;
@@ -29,67 +60,85 @@ $arm: 35px;
     }
 
     &:hover {
-      background-color: #262626;
+      background: linear-gradient(180deg, #4b4f57, #2d3035);
     }
 
     &.is-pressed,
     &:active {
-      background-color: #333333;
-      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.8);
+      background: linear-gradient(180deg, #2a2c31, #1d1f23);
     }
 
     &--up {
       grid-area: 1 / 2;
-      border-radius: 6px 6px 0 0;
+      border-radius: 7px 7px 0 0;
 
       &::after {
-        border-bottom-color: #2c2c2c;
         margin-top: -3px;
+        border-bottom-color: rgba(255, 255, 255, 0.18);
+      }
+
+      &.is-pressed,
+      &:active {
+        transform: translateY(1px);
       }
     }
 
     &--down {
       grid-area: 3 / 2;
-      border-radius: 0 0 6px 6px;
+      border-radius: 0 0 7px 7px;
 
       &::after {
-        border-top-color: #2c2c2c;
         margin-top: 3px;
+        border-top-color: rgba(255, 255, 255, 0.18);
+      }
+
+      &.is-pressed,
+      &:active {
+        transform: translateY(-1px);
       }
     }
 
     &--left {
       grid-area: 2 / 1;
-      border-radius: 6px 0 0 6px;
+      border-radius: 7px 0 0 7px;
 
       &::after {
-        border-right-color: #2c2c2c;
         margin-left: -3px;
+        border-right-color: rgba(255, 255, 255, 0.18);
+      }
+
+      &.is-pressed,
+      &:active {
+        transform: translateX(1px);
       }
     }
 
     &--right {
       grid-area: 2 / 3;
-      border-radius: 0 6px 6px 0;
+      border-radius: 0 7px 7px 0;
 
       &::after {
-        border-left-color: #2c2c2c;
         margin-left: 3px;
+        border-left-color: rgba(255, 255, 255, 0.18);
+      }
+
+      &.is-pressed,
+      &:active {
+        transform: translateX(-1px);
       }
     }
   }
 
   &__center {
-    display: grid;
     grid-area: 2 / 2;
-    place-items: center;
 
     &::before {
       content: '';
-      width: 25px;
-      height: 25px;
+      position: absolute;
+      inset: 9px;
       border-radius: 50%;
-      background: #090909;
+      background: radial-gradient(circle at 50% 60%, #34373d, #24262a);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
     }
   }
 }

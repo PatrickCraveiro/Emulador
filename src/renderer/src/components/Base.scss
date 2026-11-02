@@ -1,0 +1,22 @@
+@use '../styles/mixins' as *;
+
+.base {
+  @include shell-surface;
+  position: relative;
+  flex: none;
+  height: 410px;
+  border-radius: 24px 24px 42px 42px;
+
+  &__bezel {
+    top: 16px;
+    left: 208px;
+    width: 444px;
+    height: 340px;
+    border-radius: 14px;
+  }
+
+  &__screen {
+    position: absolute;
+    inset: 14px;
+  }
+}

@@ -6,6 +6,7 @@ import type { LaunchResult } from '@shared/types'
 import icon from '../../resources/icon.png?asset'
 import { launchGame } from './launcher'
 import { COVER_PROTOCOL, scanLibrary, type GameEntry } from './library'
+import { enableScaling, initialScale, windowSize } from './windowScale'
 
 /** Jogos da última leitura da biblioteca, indexados por id. */
 let games = new Map<string, GameEntry>()
@@ -20,11 +21,13 @@ function libraryRoot(): string {
 }
 
 function createWindow(): BrowserWindow {
+  const scale = initialScale()
   const window = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    ...windowSize(scale),
+    useContentSize: true,
     resizable: false,
     maximizable: false,
+    fullscreenable: false,
     frame: false,
     transparent: true,
     show: false,
@@ -34,10 +37,12 @@ function createWindow(): BrowserWindow {
       preload: path.join(__dirname, '../preload/index.js'),
       sandbox: true,
       contextIsolation: true,
-      nodeIntegration: false
+      nodeIntegration: false,
+      zoomFactor: scale
     }
   })
 
+  enableScaling(window, scale)
   window.once('ready-to-show', () => window.show())
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
 
@@ -79,6 +84,12 @@ function registerCoverProtocol(): void {
 protocol.registerSchemesAsPrivileged([
   { scheme: COVER_PROTOCOL, privileges: { standard: true, secure: true, supportFetchAPI: true } }
 ])
+
+// Pasta de dados alternativa: permite abrir uma segunda instância isolada (ex.: testes
+// automatizados com o app já aberto), já que a trava de instância única usa essa pasta.
+if (process.env.EMULADOR_USER_DATA) {
+  app.setPath('userData', path.resolve(process.env.EMULADOR_USER_DATA))
+}
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()

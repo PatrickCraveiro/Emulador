@@ -17,7 +17,7 @@ interface Props {
 
 /** Tela de baixo: plataforma atual e lista de jogos. */
 export function GameMenu({ on, library, platform, canSwitchPlatform, onSwitchPlatform, ...listProps }: Props) {
-  if (!on) return <div className="screen screen--off" />
+  if (!on) return <div className="screen" />
 
   const games = platform?.games ?? []
 
@@ -32,12 +32,12 @@ export function GameMenu({ on, library, platform, canSwitchPlatform, onSwitchPla
             aria-label="Plataforma anterior"
             onClick={() => onSwitchPlatform(-1)}
           >
-            ◀
+            <Chevron direction="left" />
           </button>
         )}
         <span className="menu__title">
           {platform?.name ?? 'Emulador'}
-          {platform && <small>{games.length === 1 ? '1 jogo' : `${games.length} jogos`}</small>}
+          {platform && <span className="menu__count">{games.length}</span>}
         </span>
         {canSwitchPlatform && (
           <button
@@ -47,7 +47,7 @@ export function GameMenu({ on, library, platform, canSwitchPlatform, onSwitchPla
             aria-label="Próxima plataforma"
             onClick={() => onSwitchPlatform(1)}
           >
-            ▶
+            <Chevron direction="right" />
           </button>
         )}
       </header>
@@ -76,6 +76,10 @@ export function GameMenu({ on, library, platform, canSwitchPlatform, onSwitchPla
         <Hint button="a">Jogar</Hint>
         <Hint button="x">Recarregar</Hint>
         <Hint button="y">Aleatório</Hint>
+        <span className="menu__hint">
+          <span className="menu__hint-pill">Select</span>
+          Cor
+        </span>
       </footer>
     </div>
   )
@@ -148,5 +152,13 @@ function Hint({ button, children }: { button: FaceButton; children: ReactNode })
       <span className={`menu__hint-button menu__hint-button--${button}`}>{button.toUpperCase()}</span>
       {children}
     </span>
+  )
+}
+
+function Chevron({ direction }: { direction: 'left' | 'right' }) {
+  return (
+    <svg viewBox="0 0 10 10" aria-hidden="true">
+      <path d={direction === 'left' ? 'M6.5 2 3.5 5l3 3' : 'M3.5 2l3 3-3 3'} />
+    </svg>
   )
 }

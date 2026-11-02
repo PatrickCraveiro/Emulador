@@ -1,25 +1,42 @@
-$button-colors: (
-  a: #99ca63,
-  b: #e52a27,
-  x: #1aa4ee,
-  y: #fde51f
+/// Cores dos botões ABXY (as mesmas do controle de Super Nintendo).
+$face-buttons: (
+  a: (#e2453f, #fff),
+  b: (#f2bf2f, #5b4100),
+  x: (#3f6fe0, #fff),
+  y: (#2fa457, #fff)
 );
 
-/// Carcaça plástica do console (metades de cima e de baixo).
-@mixin shell {
-  position: relative;
-  flex: none;
-  border: 3px solid rgba(169, 172, 177, 0.5);
-  border-radius: 20px 20px 22px 22px / 20px 20px 10px 10px;
-  background-image: linear-gradient(-90deg, #dbdedf, #d0d3d6);
+/// Plástico da carcaça, com brilho no topo e sombra projetada.
+@mixin shell-surface {
+  background:
+    radial-gradient(140% 100% at 12% 0%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 48%),
+    linear-gradient(180deg, var(--shell-hi) 0%, var(--shell) 12%, var(--shell) 74%, var(--shell-lo) 100%);
   box-shadow:
-    inset 0 -3px 1px rgba(191, 194, 197, 0.66),
-    inset 0 4px 2px #e7eaed,
-    inset 4px 0 2px #e4e7ea,
-    inset -4px 0 2px #e7eaeb,
-    inset -17px 0 32px #ffffff,
-    inset 20px 0 35px #b2b5b8,
-    inset 0 20px 45px #adb0b5;
+    inset 0 2px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -3px 3px rgba(0, 0, 0, 0.18),
+    inset 3px 0 3px rgba(255, 255, 255, 0.16),
+    inset -3px 0 3px rgba(0, 0, 0, 0.1),
+    0 0 0 1px var(--shell-edge),
+    0 18px 26px -10px rgba(0, 0, 0, 0.5);
+}
+
+/// Cavidade na carcaça onde um botão se encaixa.
+@mixin socket {
+  background: var(--socket);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.45),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/// Texto gravado na carcaça (START, POWER…).
+@mixin engraved-label {
+  color: var(--shell-ink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 /// Áreas que arrastam a janela (ela não tem barra de título).

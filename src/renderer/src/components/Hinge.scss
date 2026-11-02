@@ -1,106 +1,95 @@
 @use '../styles/mixins' as *;
 
+// Cilindro da dobradiça, dividido em três partes como nos portáteis de tela dupla.
 .hinge {
   @include window-drag;
+  position: relative;
+  z-index: 2;
   display: flex;
   flex: none;
-  justify-content: center;
-  height: 52px;
+  height: 42px;
+  margin: -4px 14px;
+  border-radius: 21px;
+  background: linear-gradient(
+    180deg,
+    var(--shell-lo) 0%,
+    var(--shell-hi) 28%,
+    var(--shell) 52%,
+    var(--shell-lo) 88%,
+    color-mix(in srgb, var(--shell-lo) 80%, black) 100%
+  );
+  box-shadow:
+    0 0 0 1px var(--shell-edge),
+    0 6px 10px -4px rgba(0, 0, 0, 0.45);
 
-  &__left {
-    position: relative;
-    left: 3px;
-    width: 86px;
-    height: 52px;
-    border-radius: 29px 0 0 25px / 25px 0 0 29px;
-    background-image: linear-gradient(#ffffff 30%, rgba(183, 186, 191, 0.93) 93%);
-    box-shadow:
-      -2px 0 0 rgb(190 191 192 / 37%),
-      inset 10px 0 17px rgb(250 251 253 / 72%),
-      inset 0 -2px 0 #838383,
-      inset 0 -3px 2px rgb(153 153 153 / 54%),
-      inset 24px 0 7px -18px #c9ccd1;
+  &__knuckle {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 9px;
+    width: 128px;
+
+    &--left {
+      border-right: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent);
+    }
+
+    &--right {
+      justify-content: center;
+      border-left: 1px solid color-mix(in srgb, var(--shell-edge) 70%, transparent);
+    }
   }
 
-  &__middle {
-    position: relative;
-    z-index: 3;
+  &__center {
     display: flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
-    width: 851px;
-    border-radius: 30px / 140px;
-    background-image: linear-gradient(
-      #ffffff 30%,
-      rgba(183, 186, 191, 0.93) 93%,
-      rgba(31, 32, 34, 0.36) 104%
-    );
-    box-shadow:
-      0 -1px 1px white,
-      1px 0 0 #a3a6a7,
-      -1px 0 0 #a3a6a7,
-      inset 1px 0 0 rgb(255 255 255 / 61%),
-      inset -1px 0 0 rgb(255 255 255 / 61%),
-      inset 0 -15px 14px -15px rgb(0 0 0 / 95%),
-      0 7px 11px -10px black;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 4px;
-      width: 843px;
-      height: 2px;
-      background-image: linear-gradient(#727272, #adadad);
-    }
+    gap: 6px;
   }
 
   &__mic {
     width: 5px;
-    height: 18px;
-    border-radius: 5px;
-    background: #16181b;
-    box-shadow: 1px 1px 1px white;
+    height: 5px;
+    border-radius: 50%;
+    background: #15171a;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
   }
 
   &__mic-label {
-    margin-left: 4px;
-    color: rgba(188, 191, 192, 0.56);
-    font: 15px Arial, sans-serif;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 1px white;
-  }
-
-  &__right {
-    position: relative;
-    right: 3px;
-    display: flex;
-    gap: 6px;
-    width: 91px;
-    height: 52px;
-    padding-left: 36px;
-    border-bottom: 1px solid #464646;
-    border-radius: 0 29px 20px 0 / 0 28px 29px 0;
-    background-image: linear-gradient(#ffffff 30%, rgba(183, 186, 191, 0.93) 93%);
-    box-shadow:
-      inset -1px 0 1px #a1a4a7,
-      inset -82px 0 28px -68px rgb(164 167 172 / 60%);
+    @include engraved-label;
+    font-size: 9px;
   }
 
   &__led {
-    width: 6px;
-    height: 14px;
-    border-radius: 0 0 3px 3px;
-    background: #5b6064;
+    width: 7px;
+    height: 12px;
+    border-radius: 3px;
+    background: #3b4047;
+    box-shadow:
+      inset 0 1px 2px rgba(0, 0, 0, 0.6),
+      0 1px 0 rgba(255, 255, 255, 0.4);
+    transition:
+      background 0.3s,
+      box-shadow 0.3s;
 
-    &--on {
-      animation: led-blink 1s linear infinite;
+    &--power {
+      background: #63c9ff;
+      box-shadow:
+        0 0 8px #2fb2ff,
+        inset 0 1px 1px rgba(255, 255, 255, 0.7);
+    }
+
+    &--busy {
+      animation: led-busy 0.3s steps(1) infinite;
     }
   }
 }
 
-@keyframes led-blink {
+@keyframes led-busy {
   50% {
-    background: #95ca3c;
+    background: #ffb534;
+    box-shadow:
+      0 0 8px #ff9d00,
+      inset 0 1px 1px rgba(255, 255, 255, 0.7);
   }
 }

@@ -1,6 +1,6 @@
 # Emulador
 
-Launcher de jogos retrô com visual de Nintendo DS, feito com Electron, React e TypeScript.
+Launcher de jogos retrô com visual de console portátil de tela dupla (inspirado no Nintendo 3DS), feito com Electron, React e TypeScript.
 
 Ele lê as ROMs de uma pasta, mostra a capa animada do jogo na tela de cima e abre o jogo no emulador certo com um Enter, um clique duplo ou o botão A do controle.
 
@@ -12,10 +12,13 @@ Ele lê as ROMs de uma pasta, mostra a capa animada do jogo na tela de cima e ab
 
 - **Biblioteca automática:** o app varre as pastas de ROMs, sem lista manual para manter.
 - **Várias plataformas:** troque entre Super Nintendo, Mega Drive etc. com ← e →. Novas plataformas entram só pela configuração.
-- **Capas animadas** (GIF, WebP, PNG, JPG), exibidas na proporção certa com um fundo desfocado.
+- **Capas animadas** (GIF, WebP, PNG, JPG), exibidas na proporção certa com um fundo desfocado. Jogos sem capa ganham um cartão gerado com o nome.
 - **Teclado, mouse e controle (gamepad)**, com busca por digitação ("sup" leva a "Super Mario…").
-- **Botão Power:** desliga as telas com efeito de estática.
-- **Lembra o último jogo selecionado** entre uma sessão e outra.
+- **Quatro cores de console** (aqua, branco, preto e vermelho), trocadas pelo SELECT.
+- **Filtro CRT:** o slider ao lado da tela de cima adiciona scanlines de TV de tubo à capa.
+- **Botão Power:** desliga as telas com efeito de estática e liga com animação de boot.
+- **Janela ajustável:** cabe em telas menores automaticamente e aceita zoom com Ctrl + roda do mouse.
+- **Lembra o último jogo, a cor, o filtro e o tamanho da janela** entre uma sessão e outra.
 - **Mensagens claras de erro e configuração:** emulador ausente, pasta vazia, JSON inválido.
 - **Seguro por padrão:** a interface roda isolada (`contextIsolation` + `sandbox`) e só conversa com o sistema por uma API mínima.
 
@@ -136,23 +139,29 @@ Versões, traduções e hacks de um mesmo jogo podem reaproveitar uma capa pelo 
 }
 ```
 
+Jogos sem capa ganham um cartão gerado automaticamente, com o nome do jogo.
+
 ## Controles
 
-| Ação                         | Teclado            | Controle (gamepad)    | Mouse                      |
-| ---------------------------- | ------------------ | --------------------- | -------------------------- |
-| Navegar na lista             | ↑ ↓                | D-pad / analógico     | Clique no jogo ou no D-pad |
-| Pular 6 jogos                | Page Up / Page Down | —                    | —                          |
-| Primeiro / último jogo       | Home / End         | —                     | —                          |
-| Trocar de plataforma         | ← →                | D-pad / analógico     | Setas no topo da lista     |
-| Buscar pelo nome             | Digite o nome      | —                     | —                          |
-| **Jogar**                    | Enter              | A ou Start            | Clique duplo ou botão A    |
-| Recarregar a lista           | F5                 | X                     | Botão X                    |
-| Jogo aleatório               | —                  | Y                     | Botão Y                    |
-| Ligar / desligar             | Tab até o Power + Espaço | —               | Botão Power                |
-| Mover a janela               | —                  | —                     | Arraste pela parte de cima |
-| Minimizar / fechar           | —                  | —                     | Quadradinhos nos cantos superiores |
+| Ação                    | Teclado                   | Controle (gamepad) | Mouse                                   |
+| ----------------------- | ------------------------- | ------------------ | --------------------------------------- |
+| Navegar na lista        | ↑ ↓                       | D-pad / analógico  | Clique no jogo, no D-pad ou no analógico |
+| Pular 6 jogos           | Page Up / Page Down       | —                  | —                                       |
+| Primeiro / último jogo  | Home / End                | —                  | —                                       |
+| Trocar de plataforma    | ← →                       | D-pad / analógico  | Setas no topo da lista                  |
+| Buscar pelo nome        | Digite o nome             | —                  | —                                       |
+| **Jogar**               | Enter                     | A ou Start         | Clique duplo, botão A ou START          |
+| Recarregar a lista      | F5                        | X                  | Botão X                                 |
+| Jogo aleatório          | —                         | Y                  | Botão Y                                 |
+| Trocar a cor do console | —                         | Select             | Botão SELECT                            |
+| Filtro CRT              | —                         | —                  | Slider "CRT" ao lado da tela de cima    |
+| Ligar / desligar        | Tab até o POWER + Enter   | —                  | Botão POWER                             |
+| Minimizar               | —                         | Home / Guide       | Botão HOME ou "–" no canto              |
+| Zoom da janela          | Ctrl + / Ctrl − / Ctrl 0  | —                  | Ctrl + roda do mouse                    |
+| Mover a janela          | —                         | —                  | Arraste pela metade de cima             |
+| Fechar                  | —                         | —                  | "×" no canto superior direito           |
 
-O controle só é lido enquanto a janela do launcher está em foco, então os botões apertados durante o jogo não abrem outro jogo por trás.
+No controle, o A é o botão de baixo (padrão de controles de Xbox e da maioria dos controles de PC). O controle só é lido enquanto a janela do launcher está em foco, então os botões apertados durante o jogo não abrem outro jogo por trás.
 
 ## Gerando o executável
 
@@ -171,13 +180,15 @@ src/
 ├── main/          Processo principal (Node): janela, leitura da biblioteca, abertura dos emuladores
 │   ├── index.ts       janela, IPC e protocolo cover:// para servir as capas
 │   ├── library.ts     varredura de ROMs/capas e validação do plataformas.json
-│   └── launcher.ts    abre o emulador como processo independente
+│   ├── launcher.ts    abre o emulador como processo independente
+│   └── windowScale.ts tamanho da janela e zoom (Ctrl + roda)
 ├── preload/       Ponte segura entre o processo principal e a interface (window.emulador)
 ├── renderer/      Interface em React
 │   └── src/
-│       ├── App.tsx        estado: plataforma, seleção, power
-│       ├── components/    partes do console (telas, D-pad, botões, dobradiça…)
-│       └── hooks/         teclado/gamepad, biblioteca e avisos
+│       ├── App.tsx        estado: plataforma, seleção, power, cor e filtro CRT
+│       ├── components/    partes do console (tampa, dobradiça, base, telas, botões…)
+│       ├── hooks/         teclado/gamepad, biblioteca e avisos
+│       └── styles/        cores dos temas e estilos compartilhados
 └── shared/        Tipos e nomes de canais IPC usados pelos dois lados
 ```
 

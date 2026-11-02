@@ -8,23 +8,25 @@ const KEY_ACTIONS: Record<string, Action> = {
   ArrowRight: 'right',
   PageUp: 'pageUp',
   PageDown: 'pageDown',
-  Home: 'home',
-  End: 'end',
+  Home: 'first',
+  End: 'last',
   Enter: 'a',
   F5: 'x'
 }
 
-// Mapeamento "standard" da Gamepad API (layout de controle de Xbox).
+// Mapeamento "standard" da Gamepad API, pela posição física (A = botão de baixo, como no Xbox).
 const GAMEPAD_BUTTONS: Record<number, Action> = {
   0: 'a',
   1: 'b',
   2: 'x',
   3: 'y',
-  9: 'a', // Start
+  8: 'select',
+  9: 'start',
   12: 'up',
   13: 'down',
   14: 'left',
-  15: 'right'
+  15: 'right',
+  16: 'home'
 }
 
 const REPEATABLE = new Set<Action>(['up', 'down', 'left', 'right', 'pageUp', 'pageDown'])
@@ -49,6 +51,8 @@ export function useControls({ enabled, onAction, onType }: Options): void {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.altKey || event.metaKey) return
+      // Com um controle da interface em foco (ex.: via Tab), ele cuida das próprias teclas.
+      if (event.target instanceof Element && event.target.closest('button, input')) return
       const action = KEY_ACTIONS[event.key]
       if (action) {
         event.preventDefault()

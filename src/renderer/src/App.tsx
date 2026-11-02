@@ -1,19 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Game } from '@shared/types'
 import { ActionButtons } from './components/ActionButtons'
-import { BottomShell } from './components/BottomShell'
+import { Base } from './components/Base'
+import { CirclePad } from './components/CirclePad'
 import { DPad } from './components/DPad'
 import { GameMenu } from './components/GameMenu'
 import { Hinge } from './components/Hinge'
-import { PowerSwitch } from './components/PowerSwitch'
+import { Lid } from './components/Lid'
+import { PowerButton } from './components/PowerButton'
+import { SystemButtons } from './components/SystemButtons'
 import { TopScreen } from './components/TopScreen'
-import { TopShell } from './components/TopShell'
 import { useControls } from './hooks/useControls'
 import { useLibrary } from './hooks/useLibrary'
 import { useToast } from './hooks/useToast'
+import { isThemeId, nextTheme, type ThemeId } from './themes'
 import type { Action, PowerState } from './types'
-import { loadSelection, saveSelection } from './utils/selection'
+import { isPercentage, isSelection, loadPreference, savePreference, type Selection } from './utils/storage'
 
+const BOOT_MS = 1100
 const SHUTDOWN_MS = 1500
 const PRESS_FEEDBACK_MS = 150
 const LAUNCH_COOLDOWN_MS = 1500
@@ -23,15 +27,18 @@ const TYPEAHEAD_RESET_MS = 800
 export default function App() {
   const { library, reload } = useLibrary()
   const { toast, showToast } = useToast()
-  const [initialSelection] = useState(loadSelection)
+  const [initialSelection] = useState(() => loadPreference<Selection | null>('selecao', isSelection, null))
   const [platformId, setPlatformId] = useState(initialSelection?.platformId)
   // Jogo selecionado em cada plataforma (id da plataforma → id do jogo).
   const [selectedGames, setSelectedGames] = useState<Record<string, string>>(() =>
     initialSelection ? { [initialSelection.platformId]: initialSelection.gameId } : {}
   )
-  const [power, setPower] = useState<PowerState>('on')
+  const [theme, setTheme] = useState<ThemeId>(() => loadPreference('tema', isThemeId, 'aqua'))
+  const [crt, setCrt] = useState(() => loadPreference('crt', isPercentage, 0))
+  const [power, setPower] = useState<PowerState>('booting')
   const [pressed, setPressed] = useState<Action | null>(null)
-  const shutdownTimer = useRef<number | undefined>(undefined)
+  const [busy, setBusy] = useState(false)
+  const powerTimer = useRef<number | undefined>(undefined)
   const pressTimer = useRef<number | undefined>(undefined)
   const lastLaunch = useRef(0)
   const typeahead = useRef({ text: '', time: 0 })
@@ -45,8 +52,17 @@ export default function App() {
   const isOn = power === 'on'
 
   useEffect(() => {
-    if (platform && game) saveSelection({ platformId: platform.id, gameId: game.id })
+    if (platform && game) savePreference('selecao', { platformId: platform.id, gameId: game.id })
   }, [platform, game])
+
+  useEffect(() => savePreference('tema', theme), [theme])
+  useEffect(() => savePreference('crt', crt), [crt])
+
+  // Animação de boot ao abrir o app.
+  useEffect(() => {
+    powerTimer.current = window.setTimeout(() => setPower('on'), BOOT_MS)
+    return () => window.clearTimeout(powerTimer.current)
+  }, [])
 
   function selectGame(index: number) {
     if (!platform || games.length === 0) return
@@ -93,13 +109,21 @@ export default function App() {
     lastLaunch.current = now
 
     showToast(`Iniciando ${target.title}…`)
+    setBusy(true)
     const result = await window.emulador.launchGame(target.id)
+    window.setTimeout(() => setBusy(false), 1200)
     if (!result.ok) showToast(result.error, 'error', 5000)
   }
 
   async function reloadLibrary() {
     await reload()
     showToast('Lista de jogos atualizada')
+  }
+
+  function changeTheme() {
+    const next = nextTheme(theme)
+    setTheme(next.id)
+    showToast(`Cor do console: ${next.name}`)
   }
 
   function handleAction(action: Action) {
@@ -118,54 +142,62 @@ export default function App() {
         return selectGame(gameIndex - PAGE_SIZE)
       case 'pageDown':
         return selectGame(gameIndex + PAGE_SIZE)
-      case 'home':
+      case 'first':
         return selectGame(0)
-      case 'end':
+      case 'last':
         return selectGame(games.length - 1)
       case 'left':
         return switchPlatform(-1)
       case 'right':
         return switchPlatform(1)
       case 'a':
+      case 'start':
         return void launch()
       case 'x':
         return void reloadLibrary()
       case 'y':
         return selectRandomGame()
+      case 'select':
+        return changeTheme()
+      case 'home':
+        return window.emulador.minimizeWindow()
       case 'b':
         return
     }
   }
 
-  function setPowerOn(on: boolean) {
-    window.clearTimeout(shutdownTimer.current)
-    if (on) {
-      setPower('on')
+  function togglePower() {
+    window.clearTimeout(powerTimer.current)
+    if (power === 'off' || power === 'shutting-down') {
+      setPower('booting')
+      powerTimer.current = window.setTimeout(() => setPower('on'), BOOT_MS)
     } else {
       setPower('shutting-down')
-      shutdownTimer.current = window.setTimeout(() => setPower('off'), SHUTDOWN_MS)
+      powerTimer.current = window.setTimeout(() => setPower('off'), SHUTDOWN_MS)
     }
   }
 
   useControls({ enabled: isOn, onAction: handleAction, onType: typeToSearch })
 
   return (
-    <main className="console">
-      <TopShell>
-        <TopScreen power={power} game={game} platformName={platform?.name} toast={toast} />
-      </TopShell>
-      <Hinge on={isOn} />
-      <BottomShell
-        dpad={<DPad pressed={pressed} onPress={handleAction} />}
+    <main className="console" data-theme={theme}>
+      <Lid crt={crt} onCrtChange={setCrt}>
+        <TopScreen power={power} game={game} platformName={platform?.name} toast={toast} crt={crt} />
+      </Lid>
+      <Hinge on={power !== 'off' && power !== 'shutting-down'} busy={busy} />
+      <Base
         controls={
           <>
-            <PowerSwitch on={isOn} onChange={setPowerOn} />
+            <CirclePad pressed={pressed} onPress={handleAction} />
+            <DPad pressed={pressed} onPress={handleAction} />
+            <PowerButton on={power === 'on' || power === 'booting'} onToggle={togglePower} />
             <ActionButtons pressed={pressed} onPress={handleAction} />
+            <SystemButtons pressed={pressed} onPress={handleAction} />
           </>
         }
       >
         <GameMenu
-          on={isOn}
+          on={power === 'on' || power === 'booting'}
           library={library}
           platform={platform}
           selectedIndex={gameIndex}
@@ -174,7 +206,7 @@ export default function App() {
           onSelect={selectGame}
           onLaunch={(index) => void launch(games[index])}
         />
-      </BottomShell>
+      </Base>
     </main>
   )
 }

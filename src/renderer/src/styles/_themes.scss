@@ -1,0 +1,40 @@
+// Cores de cada tema do console. --accent é a cor de destaque da interface nas telas.
+.console {
+  --shell-hi: #c4f1fd;
+  --shell: #5fcbef;
+  --shell-lo: #33a7d4;
+  --shell-edge: #1f86b3;
+  --shell-ink: #0b4964;
+  --socket: #2d93bf;
+  --accent: #27a9e1;
+
+  &[data-theme='branco'] {
+    --shell-hi: #ffffff;
+    --shell: #eceff2;
+    --shell-lo: #ccd2d8;
+    --shell-edge: #adb5bd;
+    --shell-ink: #5b6570;
+    --socket: #c3cad1;
+    --accent: #3d84f2;
+  }
+
+  &[data-theme='preto'] {
+    --shell-hi: #63676f;
+    --shell: #33363b;
+    --shell-lo: #212327;
+    --shell-edge: #101113;
+    --shell-ink: #c9ced6;
+    --socket: #1a1b1e;
+    --accent: #7c6cf5;
+  }
+
+  &[data-theme='vermelho'] {
+    --shell-hi: #ffa7ac;
+    --shell: #e2414b;
+    --shell-lo: #b82431;
+    --shell-edge: #8d1622;
+    --shell-ink: #560812;
+    --socket: #a01b28;
+    --accent: #f0434e;
+  }
+}
