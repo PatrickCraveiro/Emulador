@@ -16,7 +16,7 @@ extraResources:
     to: plataforma
 afterPack: scripts/afterPack.cjs
 win:
-  icon: resources/icon.png
+  icon: resources/icon.ico
   target:
     - target: nsis
       arch: x64

@@ -3,11 +3,15 @@ import { pathToFileURL } from 'node:url'
 import { app, BrowserWindow, ipcMain, Menu, net, protocol, shell } from 'electron'
 import { IPC } from '@shared/ipc'
 import type { LaunchResult, Library } from '@shared/types'
-import icon from '../../resources/icon.png?asset'
+import iconIco from '../../resources/icon.ico?asset'
+import iconPng from '../../resources/icon.png?asset'
 import { launchGame } from './launcher'
 import { COVER_PROTOCOL, scanLibrary, type GameEntry } from './library'
 import { syncBundledLibrary } from './librarySync'
 import { enableScaling, initialScale, windowSize } from './windowScale'
+
+/** No Windows, o .ico traz cada tamanho desenhado à parte (16 e 24 px em pixel art). */
+const icon = process.platform === 'win32' ? iconIco : iconPng
 
 /** Jogos da última leitura da biblioteca, indexados por id. */
 let games = new Map<string, GameEntry>()
