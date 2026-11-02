@@ -14,7 +14,7 @@ Ele lê as ROMs de uma pasta, mostra a capa animada do jogo na tela de cima e ab
 - **Várias plataformas:** troque entre Super Nintendo, Mega Drive, Game Boy Advance etc. com ← e →. Novas plataformas entram só pela configuração.
 - **Capas animadas** (GIF, WebP, PNG, JPG), exibidas na proporção certa com um fundo desfocado. Jogos sem capa ganham um cartão gerado com o nome.
 - **Teclado, mouse e controle (gamepad)**, com busca por digitação ("sup" leva a "Super Mario…").
-- **Quatro cores de console** (aqua, branco, preto e vermelho), trocadas pelo SELECT.
+- **Oito cores de console** (aqua, rosa, roxo, vermelho, amarelo, verde, branco e preto), trocadas pelo SELECT.
 - **Filtro CRT:** o slider ao lado da tela de cima adiciona scanlines de TV de tubo à capa.
 - **Botão Power:** desliga as telas com efeito de estática e liga com animação de boot.
 - **Janela ajustável:** cabe em telas menores automaticamente e aceita zoom com Ctrl + roda do mouse.

@@ -8,6 +8,46 @@
   --socket: #2d93bf;
   --accent: #27a9e1;
 
+  &[data-theme='rosa'] {
+    --shell-hi: #ffe1ef;
+    --shell: #f78fbf;
+    --shell-lo: #e0679f;
+    --shell-edge: #bf4881;
+    --shell-ink: #6a0f3e;
+    --socket: #d35a92;
+    --accent: #ee4f97;
+  }
+
+  &[data-theme='roxo'] {
+    --shell-hi: #e4dbff;
+    --shell: #9c83ea;
+    --shell-lo: #7a5fd2;
+    --shell-edge: #5a40b0;
+    --shell-ink: #26155e;
+    --socket: #6e52c4;
+    --accent: #8b6ff0;
+  }
+
+  &[data-theme='amarelo'] {
+    --shell-hi: #fff7c9;
+    --shell: #ffd74f;
+    --shell-lo: #efb72b;
+    --shell-edge: #c48f12;
+    --shell-ink: #5a3f00;
+    --socket: #dba21f;
+    --accent: #e8890c;
+  }
+
+  &[data-theme='verde'] {
+    --shell-hi: #d6f6c9;
+    --shell: #7ccf6c;
+    --shell-lo: #56ae49;
+    --shell-edge: #3a8a32;
+    --shell-ink: #173f12;
+    --socket: #4a9e3f;
+    --accent: #3fb75a;
+  }
+
   &[data-theme='branco'] {
     --shell-hi: #ffffff;
     --shell: #eceff2;
