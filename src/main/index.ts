@@ -32,7 +32,8 @@ async function prepareLibrary(): Promise<void> {
   await syncBundledLibrary(
     path.join(process.resourcesPath, 'plataforma'),
     libraryRoot(),
-    path.join(app.getPath('userData'), 'plataformas.instalado.json')
+    path.join(app.getPath('userData'), 'plataformas.instalado.json'),
+    path.join(app.getPath('userData'), 'controles.instalados.json')
   )
 }
 
