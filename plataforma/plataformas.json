@@ -21,6 +21,14 @@
       "covers": {
         "Sonic and Knuckles & Sonic 3": "Sonic The Hedgehog 3"
       }
+    },
+    {
+      "id": "gba",
+      "name": "Game Boy Advance",
+      "romsDir": "roms/game boy advance",
+      "extensions": [".gba"],
+      "emulator": "emulador/game boy advance/mGBA-0.10.5-win32/mGBA.exe",
+      "args": ["{rom}"]
     }
   ]
 }

@@ -6,12 +6,12 @@ Ele lê as ROMs de uma pasta, mostra a capa animada do jogo na tela de cima e ab
 
 ![Screenshot do Emulador](docs/screenshot.png)
 
-> O Emulador é o launcher (o "menu" do console); os jogos rodam em emuladores externos. O repositório já vem com o [Snes9x](https://www.snes9x.com/) (Super Nintendo) e o Kega Fusion (Mega Drive) configurados, e outros podem ser adicionados por um arquivo JSON.
+> O Emulador é o launcher (o "menu" do console); os jogos rodam em emuladores externos. O repositório já vem com o [Snes9x](https://www.snes9x.com/) (Super Nintendo), o Kega Fusion (Mega Drive) e o [mGBA](https://mgba.io/) (Game Boy Advance) configurados, e outros podem ser adicionados por um arquivo JSON.
 
 ## Funcionalidades
 
 - **Biblioteca automática:** o app varre as pastas de ROMs, sem lista manual para manter.
-- **Várias plataformas:** troque entre Super Nintendo, Mega Drive etc. com ← e →. Novas plataformas entram só pela configuração.
+- **Várias plataformas:** troque entre Super Nintendo, Mega Drive, Game Boy Advance etc. com ← e →. Novas plataformas entram só pela configuração.
 - **Capas animadas** (GIF, WebP, PNG, JPG), exibidas na proporção certa com um fundo desfocado. Jogos sem capa ganham um cartão gerado com o nome.
 - **Teclado, mouse e controle (gamepad)**, com busca por digitação ("sup" leva a "Super Mario…").
 - **Quatro cores de console** (aqua, branco, preto e vermelho), trocadas pelo SELECT.
@@ -59,14 +59,16 @@ plataforma/
 │   ├── Super Mario World.gif
 │   └── megadrive/          ← opcional: capas específicas de uma plataforma
 │       └── Aladdin.gif
-├── emulador/               ← emuladores (Snes9x e Kega Fusion), com seus saves
+├── emulador/               ← emuladores (Snes9x, Kega Fusion e mGBA), com seus saves
 │   └── super nintendo/snes9x-1.60-win32-x64/snes9x-x64.exe
 └── roms/                   ← ROMs, uma pasta por plataforma
     ├── super nintendo/
     │   ├── Super Mario World/Super Mario World.smc
     │   └── Chrono Trigger.sfc
-    └── mega drive/
-        └── Sonic The Hedgehog 2/Sonic The Hedgehog 2.md
+    ├── mega drive/
+    │   └── Sonic The Hedgehog 2/Sonic The Hedgehog 2.md
+    └── game boy advance/
+        └── The Minish Cap/The Minish Cap (BR) (T1.0-Final).gba
 ```
 
 As ROMs podem ficar soltas na pasta da plataforma ou dentro de uma subpasta por jogo. Arquivos com outras extensões (saves, readmes) são ignorados.

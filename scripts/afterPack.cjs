@@ -10,7 +10,9 @@ const FIXES = {
   'snes9x.conf': (text) =>
     text.replace(/(Window:(?:Left|Top)\s*=\s*)(-?\d+)/g, (_, prefix, value) => prefix + '0'.padEnd(value.length)),
   // Kega Fusion: posição gravada como os 4 bytes de um inteiro
-  'fusion.ini': (text) => text.replace(/^(DWindow[XY]Pos=).*$/gm, '$10,0,0,0')
+  'fusion.ini': (text) => text.replace(/^(DWindow[XY]Pos=).*$/gm, '$10,0,0,0'),
+  // mGBA: "windowPos=@Point(-1210 266)"
+  'qt.ini': (text) => text.replace(/^(windowPos=@Point\().*\)/gm, '$10 0)')
 }
 
 function* walk(dir) {
