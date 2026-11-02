@@ -31,6 +31,8 @@ const PRESS_FEEDBACK_MS = 150
 const LAUNCH_COOLDOWN_MS = 1500
 const PAGE_SIZE = 6
 const TYPEAHEAD_RESET_MS = 800
+/** Volume inicial da música ambiente (0–100), perto do volume fixo de antes do slider. */
+const DEFAULT_VOLUME = 60
 
 export default function App() {
   const { library, reload } = useLibrary()
@@ -44,6 +46,7 @@ export default function App() {
   const [theme, setTheme] = useState<ThemeId>(() => loadPreference('tema', isThemeId, 'aqua'))
   const [crt, setCrt] = useState(() => loadPreference('crt', isPercentage, 0))
   const [music, setMusic] = useState(() => loadPreference('musica', isBoolean, true))
+  const [volume, setVolume] = useState(() => loadPreference('volume', isPercentage, DEFAULT_VOLUME))
   const [power, setPower] = useState<PowerState>('booting')
   const [pressed, setPressed] = useState<Action | null>(null)
   const [busy, setBusy] = useState(false)
@@ -67,8 +70,9 @@ export default function App() {
   useEffect(() => savePreference('tema', theme), [theme])
   useEffect(() => savePreference('crt', crt), [crt])
   useEffect(() => savePreference('musica', music), [music])
+  useEffect(() => savePreference('volume', volume), [volume])
 
-  useBackgroundMusic(library?.music ?? [], isOn && music)
+  useBackgroundMusic(library?.music ?? [], isOn && music, volume)
 
   // Animação de boot ao abrir o app.
   useEffect(() => {
@@ -141,9 +145,17 @@ export default function App() {
   function toggleMusic() {
     const next = !music
     setMusic(next)
+    // Ligar com o slider no zero não teria som: volta ao volume padrão.
+    if (next && volume === 0) setVolume(DEFAULT_VOLUME)
     if (!next) showToast('Música desligada')
     else if (library?.music.length === 0) showToast('Música ligada, mas a pasta "musica" da biblioteca está vazia')
     else showToast('Música ligada')
+  }
+
+  function changeVolume(value: number) {
+    setVolume(value)
+    // Subir o volume com a música desligada liga a música.
+    if (value > 0 && !music) setMusic(true)
   }
 
   function handleAction(action: Action) {
@@ -201,7 +213,14 @@ export default function App() {
 
   return (
     <main className="console" data-theme={theme}>
-      <Lid crt={crt} onCrtChange={setCrt} music={music} onToggleMusic={() => handleAction('b')}>
+      <Lid
+        crt={crt}
+        onCrtChange={setCrt}
+        music={music}
+        onToggleMusic={() => handleAction('b')}
+        volume={volume}
+        onVolumeChange={changeVolume}
+      >
         <TopScreen power={power} game={game} platformName={platform?.name} toast={toast} crt={crt} />
       </Lid>
       <Hinge on={power !== 'off' && power !== 'shutting-down'} busy={busy} />

@@ -20,6 +20,15 @@ import { enableScaling, initialScale, windowSize } from './windowScale'
 /** No Windows, o .ico traz cada tamanho desenhado à parte (16 e 24 px em pixel art). */
 const icon = process.platform === 'win32' ? iconIco : iconPng
 
+/** Emuladores abertos pelo launcher que ainda estão rodando. */
+let runningGames = 0
+
+/** A música ambiente para com um jogo aberto ou com o launcher minimizado. */
+function updateMusicHold(window: BrowserWindow | null): void {
+  if (!window || window.isDestroyed()) return
+  window.webContents.send(IPC.musicHold, runningGames > 0 || window.isMinimized())
+}
+
 /** Jogos da última leitura da biblioteca, indexados por id. */
 let games = new Map<string, GameEntry>()
 
@@ -72,6 +81,8 @@ function createWindow(): BrowserWindow {
 
   enableScaling(window, scale)
   window.once('ready-to-show', () => window.show())
+  window.on('minimize', () => updateMusicHold(window))
+  window.on('restore', () => updateMusicHold(window))
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
 
   if (!app.isPackaged && process.env.ELECTRON_RENDERER_URL) {
@@ -93,10 +104,14 @@ function registerIpc(): void {
     return result.library
   })
 
-  ipcMain.handle(IPC.launchGame, async (_event, gameId: unknown): Promise<LaunchResult> => {
+  ipcMain.handle(IPC.launchGame, async (event, gameId: unknown): Promise<LaunchResult> => {
     const entry = typeof gameId === 'string' ? games.get(gameId) : undefined
     if (!entry) return { ok: false, error: 'Jogo não encontrado. Recarregue a lista.' }
-    return launchGame(entry)
+    const window = BrowserWindow.fromWebContents(event.sender)
+    return launchGame(entry, (running) => {
+      runningGames += running ? 1 : -1
+      updateMusicHold(window)
+    })
   })
 
   ipcMain.on(IPC.openLibraryFolder, () => {

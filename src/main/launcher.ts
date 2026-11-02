@@ -1,27 +1,39 @@
-import { spawn } from 'node:child_process'
+import { spawn, type ChildProcess } from 'node:child_process'
 import path from 'node:path'
 import { shell } from 'electron'
 import type { LaunchResult } from '@shared/types'
 import { maximizeWhenShown } from './emulatorWindow'
 import type { GameEntry } from './library'
 
-export async function launchGame({ romPath, emulator, args, maximize }: GameEntry): Promise<LaunchResult> {
+/**
+ * Abre o jogo. `onRunningChange` avisa quando o emulador abre (true) e quando fecha (false);
+ * uma ROM aberta pelo programa padrão do sistema não é acompanhada.
+ */
+export async function launchGame(
+  { romPath, emulator, args, maximize }: GameEntry,
+  onRunningChange?: (running: boolean) => void
+): Promise<LaunchResult> {
   if (!emulator) {
     // Sem emulador configurado: abre a ROM com o programa associado à extensão no sistema.
     const error = await shell.openPath(romPath)
     return error ? { ok: false, error } : { ok: true }
   }
 
-  let pid: number | undefined
+  let child: ChildProcess
   try {
-    pid = await spawnDetached(
+    child = await spawnDetached(
       emulator,
       args.map((arg) => arg.replaceAll('{rom}', romPath))
     )
   } catch (error) {
     return { ok: false, error: describeError(error, emulator) }
   }
+  if (onRunningChange) {
+    onRunningChange(true)
+    child.once('exit', () => onRunningChange(false))
+  }
 
+  const pid = child.pid
   if (maximize && pid) {
     try {
       maximizeWhenShown(pid)
@@ -34,7 +46,7 @@ export async function launchGame({ romPath, emulator, args, maximize }: GameEntr
 }
 
 /** Abre o emulador como processo independente: fechar o launcher não fecha o jogo. */
-function spawnDetached(command: string, args: string[]): Promise<number | undefined> {
+function spawnDetached(command: string, args: string[]): Promise<ChildProcess> {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       // Emuladores costumam ler configuração e saves da própria pasta.
@@ -45,7 +57,7 @@ function spawnDetached(command: string, args: string[]): Promise<number | undefi
     child.once('error', reject)
     child.once('spawn', () => {
       child.unref()
-      resolve(child.pid)
+      resolve(child)
     })
   })
 }

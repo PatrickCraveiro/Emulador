@@ -30,6 +30,11 @@ export type LaunchResult = { ok: true } | { ok: false; error: string }
 export interface EmuladorApi {
   getLibrary(): Promise<Library>
   launchGame(gameId: string): Promise<LaunchResult>
+  /**
+   * Avisa quando a música ambiente deve parar (um jogo aberto pelo launcher está rodando ou a
+   * janela está minimizada) e quando pode voltar; devolve a função que cancela o aviso.
+   */
+  onMusicHold(listener: (hold: boolean) => void): () => void
   /** Abre a pasta da biblioteca no Explorer (para adicionar ROMs e capas). */
   openLibraryFolder(): void
   minimizeWindow(): void

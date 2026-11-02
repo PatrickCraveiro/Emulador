@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { cx } from '../utils/cx'
-import { CrtSlider } from './CrtSlider'
+import { LidSlider } from './LidSlider'
 import './Lid.scss'
 
 interface Props {
@@ -8,11 +8,13 @@ interface Props {
   onCrtChange(value: number): void
   music: boolean
   onToggleMusic(): void
+  volume: number
+  onVolumeChange(value: number): void
   children: ReactNode
 }
 
 /** Metade de cima do console: tela de preview, câmera, alto-falantes e controles da janela. */
-export function Lid({ crt, onCrtChange, music, onToggleMusic, children }: Props) {
+export function Lid({ crt, onCrtChange, music, onToggleMusic, volume, onVolumeChange, children }: Props) {
   const speakerHint = music ? 'Música ambiente: desligar (B)' : 'Música ambiente: ligar (B)'
   return (
     <section className="lid">
@@ -62,7 +64,7 @@ export function Lid({ crt, onCrtChange, music, onToggleMusic, children }: Props)
           key={side}
           type="button"
           tabIndex={-1}
-          className={cx('lid__speaker', `lid__speaker--${side}`, !music && 'is-muted')}
+          className={cx('lid__speaker', `lid__speaker--${side}`, (!music || volume === 0) && 'is-muted')}
           title={speakerHint}
           aria-label={speakerHint}
           aria-pressed={music}
@@ -70,7 +72,8 @@ export function Lid({ crt, onCrtChange, music, onToggleMusic, children }: Props)
           onClick={onToggleMusic}
         />
       ))}
-      <CrtSlider value={crt} onChange={onCrtChange} />
+      <LidSlider side="left" label="Vol" description="Volume da música ambiente" value={volume} onChange={onVolumeChange} />
+      <LidSlider side="right" label="CRT" description="Filtro CRT (linhas de TV antiga)" value={crt} onChange={onCrtChange} />
 
       <div className="bezel lid__bezel">
         <span className="lid__camera" aria-hidden="true" />

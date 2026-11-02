@@ -15,9 +15,9 @@ Ele lê as ROMs de uma pasta, mostra a capa animada do jogo na tela de cima e ab
 - **Capas animadas** (GIF, WebP, PNG, JPG), exibidas na proporção certa com um fundo desfocado. Jogos sem capa ganham um cartão gerado com o nome.
 - **Teclado, mouse e controle (gamepad)**, com busca por digitação ("sup" leva a "Super Mario…").
 - **Oito cores de console** (aqua, rosa, roxo, vermelho, amarelo, verde, branco e preto), trocadas pelo SELECT.
-- **Filtro CRT:** o slider ao lado da tela de cima adiciona scanlines de TV de tubo à capa.
+- **Filtro CRT:** o slider "CRT", à direita da tela de cima, adiciona à capa as linhas horizontais das TVs de tubo (CRT, a TV antiga).
 - **Botão Power:** desliga as telas com efeito de estática e liga com animação de boot.
-- **Música ambiente** no menu, que some sozinha quando um jogo abre e volta quando o launcher volta à frente. Liga e desliga pelo B ou clicando nos alto-falantes. Toque as suas músicas colocando-as na pasta `musica/` da biblioteca.
+- **Música ambiente** no menu, em loop. Para enquanto um jogo aberto pelo launcher está rodando (ou com o launcher minimizado) e volta quando o jogo fecha. Volume no slider "VOL", à esquerda da tela de cima. Liga e desliga pelo B ou clicando nos alto-falantes. Toque as suas músicas colocando-as na pasta `musica/` da biblioteca.
 - **Janela ajustável:** cabe em telas menores automaticamente e aceita zoom com Ctrl + roda do mouse.
 - **Lembra o último jogo, a cor, o filtro e o tamanho da janela** entre uma sessão e outra.
 - **Mensagens claras de erro e configuração:** emulador ausente, pasta vazia, JSON inválido.
@@ -163,6 +163,7 @@ Jogos sem capa ganham um cartão gerado automaticamente, com o nome do jogo.
 | Jogo aleatório          | —                         | Y                  | Botão Y                                 |
 | Trocar a cor do console | —                         | Select             | Botão SELECT                            |
 | Música ambiente         | —                         | B                  | Botão B ou os alto-falantes             |
+| Volume da música        | —                         | —                  | Slider "VOL" ao lado da tela de cima    |
 | Filtro CRT              | —                         | —                  | Slider "CRT" ao lado da tela de cima    |
 | Ligar / desligar        | Tab até o POWER + Enter   | —                  | Botão POWER                             |
 | Minimizar               | —                         | Home / Guide       | Botão HOME ou "–" no canto              |

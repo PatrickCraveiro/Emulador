@@ -2,12 +2,19 @@
 
 $track-length: 96px;
 
-.crt-slider {
+.lid-slider {
   position: absolute;
   top: 58px;
-  right: 48px;
   width: 36px;
   height: 128px;
+
+  &--left {
+    left: 48px;
+  }
+
+  &--right {
+    right: 48px;
+  }
 
   &__label {
     @include engraved-label;
