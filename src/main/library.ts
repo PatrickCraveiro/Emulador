@@ -21,6 +21,8 @@ export interface PlatformConfig {
   args?: string[]
   /** Capa a usar para uma ROM específica (nome da ROM em minúsculas → nome da capa). */
   covers?: Record<string, string>
+  /** Maximiza a janela do emulador quando ele abre (só no Windows). */
+  maximize?: boolean
 }
 
 /** Jogo com os dados que só o processo principal conhece (caminhos no disco). */
@@ -31,6 +33,7 @@ export interface GameEntry {
   /** Executável já resolvido; `undefined` abre a ROM com o programa padrão do sistema. */
   emulator?: string
   args: string[]
+  maximize: boolean
 }
 
 export interface ScanResult {
@@ -110,6 +113,7 @@ function parsePlatform(item: unknown, index: number): PlatformConfig {
   if (p.covers !== undefined && !isStringMap(p.covers)) {
     fail('"covers" deve associar nomes de ROM a nomes de capa (texto → texto).')
   }
+  if (p.maximize !== undefined && typeof p.maximize !== 'boolean') fail('"maximize" deve ser true ou false.')
 
   const id = p.id as string
   return {
@@ -126,7 +130,8 @@ function parsePlatform(item: unknown, index: number): PlatformConfig {
             stripCoverExtension(cover)
           ])
         )
-      : undefined
+      : undefined,
+    maximize: p.maximize as boolean | undefined
   }
 }
 
@@ -163,7 +168,14 @@ async function scanPlatform(
       platformId: config.id,
       coverUrl: coverPath ? `${COVER_PROTOCOL}://game/${id}` : null
     }
-    entries.set(id, { game, romPath, coverPath, emulator, args: config.args ?? ['{rom}'] })
+    entries.set(id, {
+      game,
+      romPath,
+      coverPath,
+      emulator,
+      args: config.args ?? ['{rom}'],
+      maximize: config.maximize ?? false
+    })
     return game
   })
   games.sort((a, b) => collator.compare(a.title, b.title))

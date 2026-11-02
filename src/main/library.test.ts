@@ -116,6 +116,20 @@ describe('scanLibrary', () => {
     expect(cover('Meu Hack')).toBe(path.join(root, 'capas/Jogo Original.png'))
   })
 
+  it('maximiza só a janela dos emuladores com "maximize"', async () => {
+    await writeConfig([
+      { id: 'snes', romsDir: 'snes', extensions: ['.smc'], maximize: true },
+      { id: 'md', romsDir: 'md', extensions: ['.md'] }
+    ])
+    await write('snes/Doom.smc')
+    await write('md/Sonic.md')
+
+    const { library, entries } = await scanLibrary(root)
+    const [snes, md] = library.platforms.map((p) => entries.get(p.games[0].id)!)
+    expect(snes.maximize).toBe(true)
+    expect(md.maximize).toBe(false)
+  })
+
   it('gera ids estáveis entre leituras', async () => {
     await writeConfig([{ id: 'snes', romsDir: 'roms', extensions: ['.smc'] }])
     await write('roms/Doom.smc')
@@ -182,6 +196,12 @@ describe('scanLibrary', () => {
       await writeConfig([{ id: 'snes', romsDir: 'a', extensions: ['.smc'], covers: ['Doom'] }])
       const { library } = await scanLibrary(root)
       expect(library.error).toMatch(/"covers" deve associar/)
+    })
+
+    it('"maximize" que não é true/false', async () => {
+      await writeConfig([{ id: 'snes', romsDir: 'a', extensions: ['.smc'], maximize: 'sim' }])
+      const { library } = await scanLibrary(root)
+      expect(library.error).toMatch(/"maximize" deve ser true ou false/)
     })
 
     it('ids repetidos', async () => {

@@ -7,6 +7,7 @@
       "extensions": [".smc", ".sfc", ".fig", ".swc"],
       "emulator": "emulador/super nintendo/snes9x-1.60-win32-x64/snes9x-x64.exe",
       "args": ["{rom}"],
+      "maximize": true,
       "covers": {
         "Superstar Soccer 2 - Ronaldinho 97": "International Superstar Soccer Deluxe"
       }
@@ -18,6 +19,7 @@
       "extensions": [".md", ".bin", ".gen", ".smd"],
       "emulator": "emulador/mega drive/Fusion/Fusion.exe",
       "args": ["{rom}"],
+      "maximize": true,
       "covers": {
         "Sonic and Knuckles & Sonic 3": "Sonic The Hedgehog 3"
       }
@@ -28,7 +30,8 @@
       "romsDir": "roms/game boy advance",
       "extensions": [".gba"],
       "emulator": "emulador/game boy advance/mGBA-0.10.5-win32/mGBA.exe",
-      "args": ["{rom}"]
+      "args": ["{rom}"],
+      "maximize": true
     }
   ]
 }

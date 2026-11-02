@@ -92,7 +92,8 @@ Para adicionar uma plataforma, coloque o emulador em `plataforma/emulador/` (ou 
       "romsDir": "roms/super nintendo",
       "extensions": [".smc", ".sfc", ".fig", ".swc"],
       "emulator": "emulador/super nintendo/snes9x-1.60-win32-x64/snes9x-x64.exe",
-      "args": ["{rom}"]
+      "args": ["{rom}"],
+      "maximize": true
     }
   ]
 }
@@ -107,6 +108,7 @@ Para adicionar uma plataforma, coloque o emulador em `plataforma/emulador/` (ou 
 | `emulator`   | não         | Executável do emulador. Caminhos com barra são relativos a `plataforma/`; um nome simples (ex.: `retroarch`) é procurado no PATH. Sem esse campo, a ROM é aberta com o programa padrão do sistema. |
 | `args`       | não         | Argumentos passados ao emulador. `{rom}` é trocado pelo caminho da ROM (padrão: `["{rom}"]`).                                                      |
 | `covers`     | não         | Associa uma ROM à capa de outro nome, sem duplicar arquivos: `{ "nome da ROM": "nome da capa" }`. Veja [Nomes e capas](#nomes-e-capas).          |
+| `maximize`   | não         | `true` maximiza a janela do emulador assim que ela aparece (janela cheia, não tela cheia; só no Windows). Funciona até no Kega Fusion, que não tem botão de maximizar. Não use junto com argumentos de tela cheia. |
 
 Exemplo com o RetroArch, para abrir em tela cheia com um core específico:
 
