@@ -108,19 +108,25 @@ protocol.registerSchemesAsPrivileged([
   { scheme: COVER_PROTOCOL, privileges: { standard: true, secure: true, supportFetchAPI: true } }
 ])
 
-// Pasta de dados alternativa: permite abrir uma segunda instância isolada (ex.: testes
-// automatizados com o app já aberto), já que a trava de instância única usa essa pasta.
+// A trava de instância única e as preferências ficam na pasta de dados. Em desenvolvimento
+// (npm start / npm run dev) ela é separada, para não disputar com o app instalado.
+// EMULADOR_USER_DATA permite abrir mais uma instância isolada (ex.: testes automatizados).
 if (process.env.EMULADOR_USER_DATA) {
   app.setPath('userData', path.resolve(process.env.EMULADOR_USER_DATA))
+} else if (!app.isPackaged) {
+  app.setPath('userData', path.join(app.getPath('appData'), 'Emulador (dev)'))
 }
 
 if (!app.requestSingleInstanceLock()) {
+  // A instância que já está aberta recebe 'second-instance' e vem para a frente.
+  console.log('O Emulador já está aberto: a janela existente foi trazida para a frente.')
   app.quit()
 } else {
   app.on('second-instance', () => {
     const [window] = BrowserWindow.getAllWindows()
     if (!window) return
     if (window.isMinimized()) window.restore()
+    window.show()
     window.focus()
   })
 
