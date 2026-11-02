@@ -1,0 +1,70 @@
+@use '../styles/mixins' as *;
+
+$size: 40px;
+
+// Losango Y/X/B/A, na mesma disposição de um controle de Xbox.
+.action-buttons {
+  position: absolute;
+  top: 174px;
+  left: 50%;
+  width: 138px;
+  height: 130px;
+  transform: translateX(-50%);
+
+  &__button {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: $size;
+    height: $size;
+    border: 1px solid #090909;
+    border-radius: 50%;
+    background:
+      radial-gradient(
+          93% 98% at 100% 20%,
+          rgba(247, 247, 247, 0.3) 50%,
+          rgba(255, 76, 77, 0) 52%
+        )
+        110% 125% / 100% 100% no-repeat,
+      #090909;
+    box-shadow: -3px 2px 5px 1px #000000b8;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 25px;
+    font-weight: bold;
+    transition:
+      transform 0.08s,
+      box-shadow 0.08s;
+
+    &.is-pressed,
+    &:active {
+      transform: translateY(1px) scale(0.95);
+      box-shadow: -1px 1px 2px 0 #000000b8;
+    }
+
+    @each $id, $color in $button-colors {
+      &--#{$id} {
+        color: $color;
+      }
+    }
+
+    &--y {
+      top: 0;
+      left: 49px;
+    }
+
+    &--x {
+      top: 45px;
+      left: 0;
+    }
+
+    &--b {
+      top: 45px;
+      left: 98px;
+    }
+
+    &--a {
+      top: 90px;
+      left: 49px;
+    }
+  }
+}

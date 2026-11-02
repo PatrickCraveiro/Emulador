@@ -1,0 +1,20 @@
+appId: com.patrickcraveiro.emulador
+productName: Emulador
+directories:
+  buildResources: resources
+  output: dist
+files:
+  - out/**
+  - resources/**
+asarUnpack:
+  - resources/**
+# A biblioteca (ROMs, emuladores e capas) fica ao lado do .exe, fora do pacote,
+# para que novos jogos possam ser adicionados sem gerar o app de novo.
+extraFiles:
+  - from: plataforma
+    to: plataforma
+win:
+  icon: resources/icon.png
+  target:
+    - target: zip
+      arch: x64

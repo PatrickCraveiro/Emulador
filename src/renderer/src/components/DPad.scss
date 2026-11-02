@@ -1,0 +1,95 @@
+$arm: 35px;
+
+.dpad {
+  position: absolute;
+  top: 187px;
+  left: 50%;
+  display: grid;
+  grid-template: repeat(3, $arm) / repeat(3, $arm);
+  transform: translateX(-50%);
+  filter: drop-shadow(-6px 6px 6px rgba(0, 0, 0, 0.35));
+
+  &__arm,
+  &__center {
+    position: relative;
+    background-color: #151515;
+  }
+
+  &__arm {
+    transition: background-color 0.1s;
+
+    // Setinha em relevo em cada direção.
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border: 6px solid transparent;
+      transform: translate(-50%, -50%);
+    }
+
+    &:hover {
+      background-color: #262626;
+    }
+
+    &.is-pressed,
+    &:active {
+      background-color: #333333;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.8);
+    }
+
+    &--up {
+      grid-area: 1 / 2;
+      border-radius: 6px 6px 0 0;
+
+      &::after {
+        border-bottom-color: #2c2c2c;
+        margin-top: -3px;
+      }
+    }
+
+    &--down {
+      grid-area: 3 / 2;
+      border-radius: 0 0 6px 6px;
+
+      &::after {
+        border-top-color: #2c2c2c;
+        margin-top: 3px;
+      }
+    }
+
+    &--left {
+      grid-area: 2 / 1;
+      border-radius: 6px 0 0 6px;
+
+      &::after {
+        border-right-color: #2c2c2c;
+        margin-left: -3px;
+      }
+    }
+
+    &--right {
+      grid-area: 2 / 3;
+      border-radius: 0 6px 6px 0;
+
+      &::after {
+        border-left-color: #2c2c2c;
+        margin-left: 3px;
+      }
+    }
+  }
+
+  &__center {
+    display: grid;
+    grid-area: 2 / 2;
+    place-items: center;
+
+    &::before {
+      content: '';
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #090909;
+    }
+  }
+}

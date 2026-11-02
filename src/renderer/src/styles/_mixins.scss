@@ -1,0 +1,32 @@
+$button-colors: (
+  a: #99ca63,
+  b: #e52a27,
+  x: #1aa4ee,
+  y: #fde51f
+);
+
+/// Carcaça plástica do console (metades de cima e de baixo).
+@mixin shell {
+  position: relative;
+  flex: none;
+  border: 3px solid rgba(169, 172, 177, 0.5);
+  border-radius: 20px 20px 22px 22px / 20px 20px 10px 10px;
+  background-image: linear-gradient(-90deg, #dbdedf, #d0d3d6);
+  box-shadow:
+    inset 0 -3px 1px rgba(191, 194, 197, 0.66),
+    inset 0 4px 2px #e7eaed,
+    inset 4px 0 2px #e4e7ea,
+    inset -4px 0 2px #e7eaeb,
+    inset -17px 0 32px #ffffff,
+    inset 20px 0 35px #b2b5b8,
+    inset 0 20px 45px #adb0b5;
+}
+
+/// Áreas que arrastam a janela (ela não tem barra de título).
+@mixin window-drag {
+  -webkit-app-region: drag;
+}
+
+@mixin no-drag {
+  -webkit-app-region: no-drag;
+}

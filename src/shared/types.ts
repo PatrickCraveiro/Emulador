@@ -1,0 +1,33 @@
+export interface Game {
+  id: string
+  title: string
+  platformId: string
+  /** URL da capa (protocolo `cover://`) ou `null` se não houver imagem. */
+  coverUrl: string | null
+}
+
+export interface Platform {
+  id: string
+  name: string
+  /** Pasta das ROMs, relativa à pasta `plataforma/`, como está no arquivo de configuração. */
+  romsDir: string
+  games: Game[]
+  /** Problema de configuração que não impede a listagem (ex.: emulador ausente). */
+  warning?: string
+}
+
+export interface Library {
+  platforms: Platform[]
+  /** Erro que impediu a leitura da biblioteca (ex.: `plataformas.json` inválido). */
+  error?: string
+}
+
+export type LaunchResult = { ok: true } | { ok: false; error: string }
+
+/** API exposta pelo preload em `window.emulador`. */
+export interface EmuladorApi {
+  getLibrary(): Promise<Library>
+  launchGame(gameId: string): Promise<LaunchResult>
+  minimizeWindow(): void
+  closeWindow(): void
+}
