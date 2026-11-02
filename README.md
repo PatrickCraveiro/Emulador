@@ -100,6 +100,7 @@ Para adicionar uma plataforma, coloque o emulador em `plataforma/emulador/` (ou 
 | `extensions` | sim         | Extensões de arquivo consideradas ROMs.                                                                                                            |
 | `emulator`   | não         | Executável do emulador. Caminhos com barra são relativos a `plataforma/`; um nome simples (ex.: `retroarch`) é procurado no PATH. Sem esse campo, a ROM é aberta com o programa padrão do sistema. |
 | `args`       | não         | Argumentos passados ao emulador. `{rom}` é trocado pelo caminho da ROM (padrão: `["{rom}"]`).                                                      |
+| `covers`     | não         | Associa uma ROM à capa de outro nome, sem duplicar arquivos: `{ "nome da ROM": "nome da capa" }`. Veja [Nomes e capas](#nomes-e-capas).          |
 
 Exemplo com o RetroArch, para abrir em tela cheia com um core específico:
 
@@ -126,6 +127,14 @@ A capa é procurada nesta ordem (sem diferenciar maiúsculas e minúsculas):
 4. `capas/<título limpo>.*`
 
 Formatos aceitos: `.gif`, `.webp`, `.png`, `.jpg`, `.jpeg` e `.avif`. Para capas animadas, o **WebP animado** costuma ficar bem menor que o GIF com a mesma qualidade.
+
+Versões, traduções e hacks de um mesmo jogo podem reaproveitar uma capa pelo campo `covers` da plataforma, sem copiar o arquivo. A chave é o nome da ROM (com ou sem as marcações) e o valor é o nome da capa:
+
+```json
+"covers": {
+  "Superstar Soccer 2 - Ronaldinho 97": "International Superstar Soccer Deluxe"
+}
+```
 
 ## Controles
 

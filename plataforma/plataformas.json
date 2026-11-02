@@ -6,7 +6,10 @@
       "romsDir": "roms/super nintendo",
       "extensions": [".smc", ".sfc", ".fig", ".swc"],
       "emulator": "emulador/super nintendo/snes9x-1.60-win32-x64/snes9x-x64.exe",
-      "args": ["{rom}"]
+      "args": ["{rom}"],
+      "covers": {
+        "Superstar Soccer 2 - Ronaldinho 97": "International Superstar Soccer Deluxe"
+      }
     },
     {
       "id": "megadrive",
@@ -14,7 +17,10 @@
       "romsDir": "roms/mega drive",
       "extensions": [".md", ".bin", ".gen", ".smd"],
       "emulator": "emulador/mega drive/Fusion/Fusion.exe",
-      "args": ["{rom}"]
+      "args": ["{rom}"],
+      "covers": {
+        "Sonic and Knuckles & Sonic 3": "Sonic The Hedgehog 3"
+      }
     }
   ]
 }

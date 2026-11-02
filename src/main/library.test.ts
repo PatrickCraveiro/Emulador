@@ -91,6 +91,31 @@ describe('scanLibrary', () => {
     expect(byTitle['Sem Capa'].coverUrl).toBeNull()
   })
 
+  it('usa a capa indicada em "covers" para ROMs com outro nome', async () => {
+    await writeConfig([
+      {
+        id: 'md',
+        romsDir: 'roms',
+        extensions: ['.bin', '.md'],
+        covers: {
+          'SONIC AND KNUCKLES & SONIC 3': 'Sonic The Hedgehog 3.gif',
+          'Meu Hack': 'Jogo Original'
+        }
+      }
+    ])
+    await write('roms/Sonic and Knuckles & Sonic 3.bin')
+    await write('roms/Meu Hack (Beta) [h1].md')
+    await write('capas/Sonic The Hedgehog 3.gif')
+    await write('capas/Jogo Original.png')
+
+    const { library, entries } = await scanLibrary(root)
+    const cover = (title: string) =>
+      entries.get(library.platforms[0].games.find((g) => g.title === title)!.id)!.coverPath
+
+    expect(cover('Sonic and Knuckles & Sonic 3')).toBe(path.join(root, 'capas/Sonic The Hedgehog 3.gif'))
+    expect(cover('Meu Hack')).toBe(path.join(root, 'capas/Jogo Original.png'))
+  })
+
   it('gera ids estáveis entre leituras', async () => {
     await writeConfig([{ id: 'snes', romsDir: 'roms', extensions: ['.smc'] }])
     await write('roms/Doom.smc')
@@ -151,6 +176,12 @@ describe('scanLibrary', () => {
       await writeConfig([{ id: 'snes', extensions: ['.smc'] }])
       const { library } = await scanLibrary(root)
       expect(library.error).toMatch(/plataforma 1: "romsDir" é obrigatório/)
+    })
+
+    it('"covers" com formato inválido', async () => {
+      await writeConfig([{ id: 'snes', romsDir: 'a', extensions: ['.smc'], covers: ['Doom'] }])
+      const { library } = await scanLibrary(root)
+      expect(library.error).toMatch(/"covers" deve associar/)
     })
 
     it('ids repetidos', async () => {

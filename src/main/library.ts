@@ -19,6 +19,8 @@ export interface PlatformConfig {
   extensions: string[]
   emulator?: string
   args?: string[]
+  /** Capa a usar para uma ROM específica (nome da ROM em minúsculas → nome da capa). */
+  covers?: Record<string, string>
 }
 
 /** Jogo com os dados que só o processo principal conhece (caminhos no disco). */
@@ -90,6 +92,11 @@ function parsePlatform(item: unknown, index: number): PlatformConfig {
   }
   const isStringList = (value: unknown): value is string[] =>
     Array.isArray(value) && value.every((v) => typeof v === 'string')
+  const isStringMap = (value: unknown): value is Record<string, string> =>
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.values(value).every((v) => typeof v === 'string')
 
   const p = (item ?? {}) as Record<string, unknown>
   if (typeof p.id !== 'string' || !p.id) fail('"id" é obrigatório.')
@@ -100,6 +107,9 @@ function parsePlatform(item: unknown, index: number): PlatformConfig {
   if (p.name !== undefined && typeof p.name !== 'string') fail('"name" deve ser texto.')
   if (p.emulator !== undefined && typeof p.emulator !== 'string') fail('"emulator" deve ser texto.')
   if (p.args !== undefined && !isStringList(p.args)) fail('"args" deve ser uma lista de textos.')
+  if (p.covers !== undefined && !isStringMap(p.covers)) {
+    fail('"covers" deve associar nomes de ROM a nomes de capa (texto → texto).')
+  }
 
   const id = p.id as string
   return {
@@ -108,7 +118,15 @@ function parsePlatform(item: unknown, index: number): PlatformConfig {
     romsDir: p.romsDir as string,
     extensions: (p.extensions as string[]).map(normalizeExtension),
     emulator: (p.emulator as string | undefined) || undefined,
-    args: p.args as string[] | undefined
+    args: p.args as string[] | undefined,
+    covers: p.covers
+      ? Object.fromEntries(
+          Object.entries(p.covers as Record<string, string>).map(([rom, cover]) => [
+            rom.toLowerCase(),
+            stripCoverExtension(cover)
+          ])
+        )
+      : undefined
   }
 }
 
@@ -137,7 +155,8 @@ async function scanPlatform(
     const fileName = path.basename(romPath, path.extname(romPath))
     const title = cleanTitle(fileName)
     const id = gameId(config.id, path.relative(romsDir, romPath))
-    const coverPath = findCover(covers, config.id, [fileName, title])
+    const alias = config.covers?.[fileName.toLowerCase()] ?? config.covers?.[title.toLowerCase()]
+    const coverPath = findCover(covers, config.id, alias ? [alias, fileName, title] : [fileName, title])
     const game: Game = {
       id,
       title,
@@ -222,6 +241,11 @@ async function listFiles(dir: string, depth: number): Promise<string[]> {
     else if (dirent.isDirectory() && depth > 0) files.push(...(await listFiles(fullPath, depth - 1)))
   }
   return files
+}
+
+function stripCoverExtension(name: string): string {
+  const ext = path.extname(name).toLowerCase()
+  return COVER_EXTENSIONS.includes(ext) ? name.slice(0, -ext.length) : name
 }
 
 function normalizeExtension(ext: string): string {
