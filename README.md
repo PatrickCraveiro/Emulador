@@ -44,9 +44,9 @@ Pronto: os jogos já aparecem na lista e abrem com Enter. O `npm run dev` també
 | `npm start`         | Compila e abre a versão de produção                        |
 | `npm test`          | Roda os testes (Vitest)                                    |
 | `npm run typecheck` | Verifica os tipos do TypeScript                            |
-| `npm run build`     | Verifica os tipos e compila para a pasta `out/`            |
-| `npm run dist`      | Gera o instalador para Windows em `dist/`                  |
-| `npm run dist:dir`  | Gera só a pasta do app (`dist/win-unpacked`), para testes  |
+| `npm run build`     | Gera o **instalador** para Windows em `dist/` (leva alguns minutos) |
+| `npm run build:dir` | Gera só a pasta do app (`dist/win-unpacked`), para testes  |
+| `npm run compile`   | Verifica os tipos e compila o código para `out/`, sem empacotar |
 
 ## Montando a biblioteca
 
@@ -167,10 +167,10 @@ No controle, o A é o botão de baixo (padrão de controles de Xbox e da maioria
 ## Instalador para Windows
 
 ```bash
-npm run dist
+npm run build
 ```
 
-Gera `dist/Emulador-Setup-<versão>.exe`, um instalador único com o app, os emuladores, as ROMs e as capas. Para instalar em qualquer PC (inclusive em outro computador), é só copiar esse arquivo e dar dois cliques:
+Depois de alguns minutos (o instalador comprime cerca de 400 MB), gera `dist/Emulador-Setup-<versão>.exe`, um instalador único com o app, os emuladores, as ROMs e as capas. Os outros arquivos em `dist/` são subprodutos e não são necessários para instalar. Para instalar em qualquer PC (inclusive em outro computador), é só copiar esse arquivo e dar dois cliques:
 
 - A instalação é por usuário e **não pede senha de administrador**.
 - Cria atalhos na **área de trabalho** e no menu Iniciar, e abre o app ao terminar.
